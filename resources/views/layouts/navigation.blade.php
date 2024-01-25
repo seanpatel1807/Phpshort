@@ -21,6 +21,11 @@
                         {{ __('admin') }}
                     </x-nav-link>
                     @endrole
+                    @role('user')
+                    <x-nav-link :href="route('user.user')" :active="request()->routeIs('user.user')">
+                        {{ __('user') }}
+                    </x-nav-link>
+                    @endrole
                 </div>
             </div>
 
