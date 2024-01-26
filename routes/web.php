@@ -3,7 +3,6 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\IndexController;
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -47,6 +46,10 @@ Route::get('/domians', function () {
     return view('domains');
 })->middleware(['auth', 'role:admin'])->name('domains');
 
+Route::get('/admin/settings', [IndexController::class, 'setting'])->name('admin.settings');
+
+
+Route::get('/domains', [Settingcontroller::class, 'showDomains']);
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
