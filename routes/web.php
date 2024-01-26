@@ -46,7 +46,9 @@ Route::get('/domians', function () {
     return view('domains');
 })->middleware(['auth', 'role:admin'])->name('domains');
 
-Route::get('/admin/settings', [IndexController::class, 'setting'])->name('admin.settings');
+Route::get('/admin/general', [IndexController::class, 'setting'])->name('admin.setting');
+Route::get('/admin/appearance', [IndexController::class, 'appearance'])->name('admin.appearance');
+
 
 
 Route::get('/domains', [Settingcontroller::class, 'showDomains']);

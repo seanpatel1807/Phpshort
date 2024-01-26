@@ -9,7 +9,7 @@
         </thead>
         <tbody>
             @foreach($groupedSettings as $group => $groupSettings)
-                @if($group === 'general')
+                @if($group === 'appearance')
                     @foreach($groupSettings as $setting)
                         <tr>
                             <td class="py-2 px-4 border-b border-gray-200">{{ $setting->group }}</td>

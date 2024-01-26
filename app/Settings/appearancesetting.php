@@ -12,7 +12,7 @@ class generalSetting extends Settings
     public string $custom_css;
 
 
-    public static function group(): string
+    public static function group(): string 
     {
         return 'appearance';
     }
