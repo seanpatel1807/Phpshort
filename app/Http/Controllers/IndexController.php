@@ -22,7 +22,7 @@ class IndexController extends Controller
     
 
     foreach ($data as $key => $value) {
-        Setting::where('name', $key)->update(['payload' => $value]);
+        Setting::where('name', $key)->update(['payload' =>$value]);
     }
     return redirect()->route('admin.setting');
     }
@@ -38,10 +38,11 @@ class IndexController extends Controller
     public function updateappearance(Request $request)
     {    
         $data=$request->all();
-    foreach ($data as $key => $value) {
+        
+    foreach ($data as $key => $value) 
+    {
         Setting::where('name', $key)->update(['payload' => $value]);
     }
-
     return redirect()->route('admin.appearance');
     }
 }
