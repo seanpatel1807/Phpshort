@@ -47,9 +47,10 @@ Route::get('/domians', function () {
 })->middleware(['auth', 'role:admin'])->name('domains');
 
 Route::get('/admin/general', [IndexController::class, 'setting'])->name('admin.setting');
+Route::post('/admin/general/update', [IndexController::class,'updateSettings'])->name('admin.general.update');
+
 Route::get('/admin/appearance', [IndexController::class, 'appearance'])->name('admin.appearance');
-
-
+Route::post('/admin/appearance/update', [IndexController::class,'updateappearance'])->name('admin.appearance.update');
 
 Route::get('/domains', [Settingcontroller::class, 'showDomains']);
 Route::middleware('auth')->group(function () {

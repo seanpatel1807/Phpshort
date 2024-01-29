@@ -1,13 +1,13 @@
 <x-admin-layout>
     <div class="bg-black min-h-screen" style="width: 180vh">
-        <form method="POST" action="" class="w-full max-w-md p-6 rounded-lg shadow-md bg-gray-800">
+        <form method="POST" action="{{ route('admin.general.update') }}" class="w-full max-w-md p-6 rounded-lg shadow-md bg-gray-800">
             @csrf
             @foreach($groupedSettings as $group => $groupSettings)
                 @if($group === 'general')
                     @foreach($groupSettings as $setting)
                         <div class="mb-4">
                             <label for="{{ $setting->name }}" class="block text-lg font-semibold text-white">{{ $setting->name }}</label>
-                            <input type="text" id="{{ $setting->name }}" name="{{ $setting->name }}" value="{{ $setting->payload }}" placeholder="{{ $setting->payload }}" class="w-full px-4 py-2 border border-gray-700 rounded-md bg-gray-700 text-white focus:outline-none focus:border-blue-500 text-lg">
+                            <input type="text" id="{{ $setting->name }}" name="{{ $setting->name }}" value="{{ $setting->payload }}" placeholder="{{ $setting->payload }}" class="w-full px-4 py-2 border border-gray-700 rounded-md bg-gray-700 text-black focus:outline-none focus:border-blue-500 text-lg">
                         </div>
                     @endforeach
                 @endif
