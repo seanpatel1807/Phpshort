@@ -16,8 +16,6 @@ class IndexController extends Controller
         return view('admin.setting', compact('groupedSettings'));
         
     }
-
-
     public function updateSettings(Request $request)
     {    $data=$request->all();
 
@@ -26,6 +24,27 @@ class IndexController extends Controller
                 Setting::where('name', $key)->update(['payload' =>$value]);
             }
         return redirect()->route('admin.setting');
+    }
+
+
+
+    public function social()
+    {
+        $settings = Setting::all();//setting ni badhi value aiya fetch thase 
+        $groupedSettings = $settings->groupBy('group');
+        return view('admin.social', compact('groupedSettings'));
+        
+    }
+
+
+    public function updatesocial(Request $request)
+    {    $data=$request->all();
+
+        foreach ($data as $key => $value) 
+            {
+                Setting::where('name', $key)->update(['payload' =>$value]);
+            }
+        return redirect()->route('admin.social');
     }
 
 

@@ -1,6 +1,6 @@
 <x-admin-layout>
-    <div class="bg-black min-h-screen" style="width: 180vh">
-        <form method="POST" action="{{ route('admin.appearance.update') }}" class="w-full max-w-md p-6 rounded-lg shadow-md bg-gray-800" enctype="multipart/form-data">
+    <div class="min-h-screen">
+        <form method="POST" action="{{ route('admin.appearance.update') }}" class="w-full p-6 rounded-lg shadow-md bg-gray-800" enctype="multipart/form-data">
             @csrf
             @foreach($groupedSettings as $group => $groupSettings)
                 @if($group === 'appearance')

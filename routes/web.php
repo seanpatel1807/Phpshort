@@ -52,6 +52,9 @@ Route::post('/admin/general/update', [IndexController::class,'updateSettings'])-
 Route::get('/admin/appearance', [IndexController::class, 'appearance'])->name('admin.appearance');
 Route::post('/admin/appearance/update', [IndexController::class,'updateappearance'])->name('admin.appearance.update');
 
+Route::get('/admin/social', [IndexController::class, 'social'])->name('admin.social');
+Route::post('/admin/social/update', [IndexController::class,'updatesocial'])->name('admin.social.update');
+
 Route::get('/domains', [Settingcontroller::class, 'showDomains']);
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
