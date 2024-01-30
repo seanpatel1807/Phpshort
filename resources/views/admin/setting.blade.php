@@ -26,7 +26,7 @@
                                     <option value="100" @if($setting->payload === '100') selected @endif>100</option>
                                 </select>
                             @else
-                                <input type="text" id="{{ $setting->name }}" name="{{ $setting->name }}" value="{{ $setting->payload }}" placeholder="{{ $setting->payload }}" class="w-full px-4 py-2 border border-gray-700 rounded-md bg-gray-700 text-black focus:outline-none focus:border-blue-500 text-lg">
+                                <input type="text" id="{{ $setting->name }}" name="{{ $setting->name }}" value="{{ $setting->payload }}" placeholder="{{ $setting->payload }}" class="w-full px-4 py-2 border border-gray-700 rounded-md bg-gray-700 text-black focus:outline-none focus:border-blue-500 text-lg"required>
                             @endif
                         </div>
                     @endforeach
