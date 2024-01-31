@@ -6,13 +6,13 @@
                 @if($group === 'social')
                     @foreach($groupSettings as $setting)
                         <div class="mb-4">
-                            <label for="{{ $setting->name }}" class="block text-lg font-semibold text-white">{{ $setting->name }}</label>
-                            <input type="text" id="{{ $setting->name }}" name="{{ $setting->name }}" value="{{ $setting->payload }}" placeholder="{{ $setting->payload }}" class="w-full px-4 py-2 border border-gray-700 rounded-md bg-gray-700 text-white focus:outline-none focus:border-blue-500 text-lg" required>
+                            <label for="{{ $setting->name }}" class="block text-lg font-semibold text-{{ $groupedSettings['appearance']->where('name', 'theme')->first()->payload === 'dark' ? 'white' : 'black' }}">{{ $setting->name }}</label>
+                            <input type="text" id="{{ $setting->name }}" name="{{ $setting->name }}" value="{{ $setting->payload }}" placeholder="{{ $setting->payload }}" class="w-full px-4 py-2 border border-gray-700 rounded-md bg-gray-700 text-{{ $groupedSettings['appearance']->where('name', 'theme')->first()->payload === 'dark' ? 'white' : 'black' }} focus:outline-none focus:border-blue-500 text-lg" required>
                         </div>
                     @endforeach
                 @endif
             @endforeach
-            <button type="submit" class="bg-white text-black px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:shadow-outline-blue text-lg">Save Changes</button>
+            <button type="submit" class="bg-{{ $groupedSettings['appearance']->where('name', 'theme')->first()->payload === 'dark' ? 'white' : 'black' }} text-{{ $groupedSettings['appearance']->where('name', 'theme')->first()->payload === 'dark' ? 'black' : 'white' }} px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:shadow-outline-blue text-lg">Save Changes</button>
         </form>
         @foreach($groupSettings as $setting)
         @switch($setting->name)

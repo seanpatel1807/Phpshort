@@ -25,9 +25,8 @@ class IndexController extends Controller
             }
         return redirect()->route('admin.setting');
     }
-
-
-
+    
+        
     public function social()
     {
         $settings = Setting::all();//setting ni badhi value aiya fetch thase 
@@ -35,7 +34,6 @@ class IndexController extends Controller
         return view('admin.social', compact('groupedSettings'));
         
     }
-
 
     public function updatesocial(Request $request)
     {    $data=$request->all();
