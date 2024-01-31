@@ -45,6 +45,24 @@ class IndexController extends Controller
         return redirect()->route('admin.social');
     }
 
+    public function announcement()
+    {
+        $settings = Setting::all();//setting ni badhi value aiya fetch thase 
+        $groupedSettings = $settings->groupBy('group');
+        return view('admin.announcement', compact('groupedSettings'));
+        
+    }
+
+    public function updateannouncement(Request $request)
+    {    $data=$request->all();
+
+        foreach ($data as $key => $value) 
+            {
+                Setting::where('name', $key)->update(['payload' =>$value]);
+            }
+        return redirect()->route('admin.announcement');
+    }
+
 
     public function appearance()
     {

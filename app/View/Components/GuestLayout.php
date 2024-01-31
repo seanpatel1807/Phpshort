@@ -4,6 +4,8 @@ namespace App\View\Components;
 
 use Illuminate\View\Component;
 use Illuminate\View\View;
+use App\Models\Setting;
+
 
 class GuestLayout extends Component
 {
@@ -12,6 +14,11 @@ class GuestLayout extends Component
      */
     public function render(): View
     {
-        return view('layouts.guest');
+        $settings = Setting::all();
+        $groupedSettings = $settings->groupBy('group');
+        $guest_content = $settings->where('name', 'guest')->first(); // Assuming 'theme' is the name for the theme setting
+        $guest_color = $settings->where('name', 'guest_color')->first();
+
+        return view('layouts.guest',compact('groupedSettings'));    
     }
 }
