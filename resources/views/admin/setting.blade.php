@@ -1,6 +1,6 @@
 <x-admin-layout>
     <div class="min-h-screen">
-        <form method="POST" action="{{ route('admin.general.update') }}" class="w-full p-6 rounded-lg shadow-md bg-gray-800">
+        <form method="POST" action="{{ route('admin.general.update') }}" class="w-full p-6 rounded-lg shadow-md ">
             @csrf
             @foreach($groupedSettings as $group => $groupSettings)
                 @if($group === 'general')

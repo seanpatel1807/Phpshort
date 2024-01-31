@@ -15,12 +15,12 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
+        <div class="min-h-screen">
             @include('layouts.navigation')
             <body class="font-sans antialiased">
                 <div class="flex">
                     <!-- Sidebar -->
-                    <div class="flex flex-col flex-shrink-0 w-64 text-gray-700 bg-white dark:text-gray-200 dark:bg-gray-800">
+                    <div class="flex flex-col flex-shrink-0 w-64 text-gray-700  dark:text-gray-200">
                         
                         <nav class="flex-grow px-4 pb-4 md:block md:pb-0 md:overflow-y-auto">
                             <a class="block px-4 py-2 mt-2 text-sm font-semibold text-gray-900 bg-gray-200 rounded-lg dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:bg-gray-600 dark:focus:text-white dark:hover:text-white dark:text-gray-200 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline" href='{{ route('dashboard') }}'>Dashboard</a>

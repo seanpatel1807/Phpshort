@@ -1,6 +1,6 @@
 <x-admin-layout>
-    <div class="min-h-screen">
-        <form method="POST" action="{{ route('admin.appearance.update') }}" class="w-full p-6 rounded-lg shadow-md bg-gray-800" enctype="multipart/form-data">
+    <div class="min-h-screen" style="background-color: {{ $groupedSettings['appearance']->where('name', 'theme')->first()->payload === 'dark' ? '#333333' : '#ffffff' }}">
+        <form method="POST" action="{{ route('admin.appearance.update') }}" class="w-full p-6 rounded-lg shadow-md" enctype="multipart/form-data">
             @csrf
             @foreach($groupedSettings as $group => $groupSettings)
                 @if($group === 'appearance')
@@ -13,14 +13,10 @@
                                     <option value="light" @if($setting->payload === 'light') selected @endif>Light</option>
                                     <option value="dark" @if($setting->payload === 'dark') selected @endif>Dark</option>
                                 </select>
-
-
                             @elseif($setting->name === 'custom_js')
                                 <textarea id="{{ $setting->name }}" name="{{ $setting->name }}" class="w-full px-4 py-2 border border-gray-700 rounded-md bg-gray-700 text-white focus:outline-none focus:border-blue-500 text-lg" rows="4" placeholder="{{ $setting->payload }}">{{ $setting->payload }}</textarea>
-                            
-                            
                             @elseif(in_array($setting->name, ['logo', 'favicon']))
-                                    <input type="file" id="{{ $setting->name }}" name="{{ $setting->name }}" class="w-full px-4 py-2 border border-gray-700 rounded-md bg-gray-700 text-white focus:outline-none focus:border-blue-500 text-lg">
+                                <input type="file" id="{{ $setting->name }}" name="{{ $setting->name }}" class="w-full px-4 py-2 border border-gray-700 rounded-md bg-gray-700 text-white focus:outline-none focus:border-blue-500 text-lg">
                                 @if ($errors->any())
                                     @foreach ($errors->all() as $error)
                                         <li>{{ $error }}</li>
