@@ -1,5 +1,8 @@
 <x-admin-layout>
     <div class="min-h-screen">
+        <p class="text-4xl font-bold mb-6 text-{{ $groupedSettings['appearance']->where('name', 'theme')->first()->payload === 'dark' ? 'white' : 'black' }}">
+            Social Settings
+        </p>
         <form method="POST" action="{{ route('admin.social.update') }}" class="w-full p-6 rounded-lg shadow-md" enctype="multipart/form-data">
             @csrf
             @foreach($groupedSettings as $group => $groupSettings)

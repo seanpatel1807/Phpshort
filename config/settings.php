@@ -9,7 +9,8 @@ return [
     'settings' => [
         generalsetting::class,
         appearancesetting::class,
-
+        socialsetting::class,
+        announcementsetting::class,
 
     ],
 

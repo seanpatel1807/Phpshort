@@ -23,6 +23,12 @@
                     {{ $groupedSettings['announcements']->where('name', 'guest')->first()->payload }}
                 </p>
             </div>
+        
+            <script>
+                setTimeout(function() {
+                    document.querySelector('.announcement').style.display = 'none';
+                }, 5000); 
+            </script>
         @endif
             <div>
                 <a href="{{ route('dashboard') }}">

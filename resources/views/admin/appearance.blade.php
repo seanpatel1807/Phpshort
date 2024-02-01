@@ -1,5 +1,8 @@
 <x-admin-layout>
     <div class="min-h-screen" style="background-color: {{ $groupedSettings['appearance']->where('name', 'theme')->first()->payload === 'dark' ? '#333333' : '#ffffff' }}">
+        <h1 class="text-4xl font-bold mb-6 text-{{ $groupedSettings['appearance']->where('name', 'theme')->first()->payload === 'dark' ? 'white' : 'black' }}">
+            Appearance Settings
+        </h1>
         <form method="POST" action="{{ route('admin.appearance.update') }}" class="w-full p-6 rounded-lg shadow-md" enctype="multipart/form-data">
             @csrf
             @foreach($groupedSettings as $group => $groupSettings)
