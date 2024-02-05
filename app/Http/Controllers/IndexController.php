@@ -9,73 +9,10 @@ use Illuminate\Validation\Rule;
 class IndexController extends Controller
 {        
 
-    public function setting()
+    private function updateSettingsGroup(Request $request, $route)
     {
-        $settings = Setting::all();//setting ni badhi value aiya fetch thase 
-        $groupedSettings = $settings->groupBy('group');
-        return view('admin.setting', compact('groupedSettings'));
-        
-    }
-    public function updateSettings(Request $request)
-    {    $data=$request->all();
+        $data = $request->all();
 
-        foreach ($data as $key => $value) 
-            {
-                Setting::where('name', $key)->update(['payload' =>$value]);
-            }
-        return redirect()->route('admin.setting');
-    }
-    
-        
-    public function social()
-    {
-        $settings = Setting::all();//setting ni badhi value aiya fetch thase 
-        $groupedSettings = $settings->groupBy('group');
-        return view('admin.social', compact('groupedSettings'));
-        
-    }
-
-    public function updatesocial(Request $request)
-    {    $data=$request->all();
-
-        foreach ($data as $key => $value) 
-            {
-                Setting::where('name', $key)->update(['payload' =>$value]);
-            }
-        return redirect()->route('admin.social');
-    }
-
-    public function announcement()
-    {
-        $settings = Setting::all();//setting ni badhi value aiya fetch thase 
-        $groupedSettings = $settings->groupBy('group');
-        return view('admin.announcement', compact('groupedSettings'));
-        
-    }
-
-    public function updateannouncement(Request $request)
-    {    $data=$request->all();
-
-        foreach ($data as $key => $value) 
-            {
-                Setting::where('name', $key)->update(['payload' =>$value]);
-            }
-        return redirect()->route('admin.announcement');
-    }
-
-
-    public function appearance()
-    {
-        $settings = Setting::all();//setting ni badhi value aiya fetch thase 
-        $groupedSettings = $settings->groupBy('group');
-
-        return view('admin.appearance', compact('groupedSettings'));        
-    }
-
-    public function updateappearance(Request $request)
-    {    
-        $data=$request->all();
-       
         foreach ($data as $key => $value) 
         {
             if (in_array($key, ['logo', 'favicon'])) 
@@ -102,6 +39,57 @@ class IndexController extends Controller
                 Setting::where('name', $key)->update(['payload' => $value]);
             }
         }
-        return redirect()->route('admin.appearance');
+        return redirect()->route($route);
+    }
+
+    public function setting()
+    {
+        $groupedSettings = $this->getGroupedSettings();
+        return view('admin.setting', compact('groupedSettings'));
+    }
+
+    public function updateSettings(Request $request)
+    {
+        return $this->updateSettingsGroup($request, 'admin.setting');
+    }
+    
+    public function social()
+    {
+        $groupedSettings = $this->getGroupedSettings();
+        return view('admin.social', compact('groupedSettings'));
+    }
+
+    public function updatesocial(Request $request)
+    {
+        return $this->updateSettingsGroup($request, 'admin.social');
+    }
+
+    public function announcement()
+    {
+        $groupedSettings = $this->getGroupedSettings();
+        return view('admin.announcement', compact('groupedSettings'));
+    }
+
+    public function updateannouncement(Request $request)
+    {
+        return $this->updateSettingsGroup($request, 'admin.announcement');
+    }
+
+    public function appearance()
+    {
+        $groupedSettings = $this->getGroupedSettings();//call the function which contains the main function
+        return view('admin.appearance', compact('groupedSettings'));        
+    }
+
+    public function updateappearance(Request $request)
+    {    
+        return $this->updateSettingsGroup($request, 'admin.appearance');
+    }
+
+    private function getGroupedSettings()//just made a function which contains all the common functionalities 
+    {
+        $settings = Setting::all();
+        return $settings->groupBy('group');
     }
 }
+?>

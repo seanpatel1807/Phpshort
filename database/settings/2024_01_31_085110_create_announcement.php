@@ -12,3 +12,4 @@ return new class extends SettingsMigration
         $this->migrator->add('announcements.guest_color', 'primary');
     }
 };
+?>

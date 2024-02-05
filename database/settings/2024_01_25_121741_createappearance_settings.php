@@ -12,3 +12,4 @@ return new class extends SettingsMigration
         $this->migrator->add('appearance.custom_css','@import url("https://rsms.me/inter/inter.css");');
     }
 };
+?>

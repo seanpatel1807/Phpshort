@@ -12,3 +12,4 @@ return new class extends SettingsMigration
         $this->migrator->add('social.instagram', 'https://www.instagram.com');
     }
 };
+?>
