@@ -2,9 +2,11 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\IndexController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'welcome');
+
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::view('/dashboard', 'dashboard')->name('dashboard');
@@ -17,6 +19,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::view('/spaces', 'spaces')->name('spaces');
             Route::view('/links', 'links')->name('links');
             Route::view('/domains', 'domains')->name('domains');
+            Route::get('/users', [UserController::class, 'Index'])->name('users');
+
             
             Route::prefix('/general')->group(function () {//same another function for another prefixs
                 Route::get('/', [IndexController::class, 'setting'])->name('admin.setting');
