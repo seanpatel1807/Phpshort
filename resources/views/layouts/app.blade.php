@@ -35,6 +35,29 @@
         .announcement-text {
             margin: 0;
         }
+
+        .common-link {
+            display: block;
+            padding: 4px 16px;
+            margin-top: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .common-link:hover {
+            background-color: #e5e5e5;
+            /* Adjust the color as needed */
+        }
+
+        .common-link:focus,
+        .common-link:hover,
+        .common-link:active {
+            outline: none;
+            text-decoration: none;
+        }
     </style>
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -42,6 +65,9 @@
 
 <body class="font-sans antialiased"
     style="background-color: {{ $groupedSettings['appearance']->where('name', 'theme')->first()->payload === 'dark' ? '#333333' : '#ffffff' }}    ">
+    @php
+        $textColorClass = $groupedSettings['appearance']->where('name', 'theme')->first()->payload === 'dark' ? 'white' : 'black';
+    @endphp
     <div class="image">
         <a href="{{ route('dashboard') }}">
             @if ($groupedSettings['appearance']->where('name', 'logo')->first())
@@ -57,23 +83,18 @@
             <div class="flex">
                 <!-- Sidebar -->
                 <div class="flex flex-col flex-shrink-0 w-64 text-gray-700 bg-white"
-                    style="background-color: {{ $groupedSettings['appearance']->where('name', 'theme')->first()->payload === 'dark' ? '#333333' : '#ffffff' }}    ">
+                    style="background-color: {{ $groupedSettings['appearance']->where('name', 'theme')->first()->payload === 'dark' ? '#333333' : '#ffffff' }}">
 
                     <nav class="flex-grow px-4 pb-4 md:block md:pb-0 md:overflow-y-auto">
-                        <a class="block px-4 py-2 mt-2 text-sm font-semibold text-gray-900 bg-transparent rounded-lg dark:bg-transparent dark:hover:bg-gray-600 dark:focus:bg-gray-600 dark:focus:text-white dark:hover:text-white text-{{ $groupedSettings['appearance']->where('name', 'theme')->first()->payload === 'dark' ? 'white' : 'black' }} hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline"
-                            href='{{ route('dashboard') }}'>Dashboard</a>
-                        <a class="block px-4 py-2 mt-2 text-sm font-semibold text-gray-900 bg-transparent rounded-lg dark:bg-transparent dark:hover:bg-gray-600 dark:focus:bg-gray-600 dark:focus:text-white dark:hover:text-white text-{{ $groupedSettings['appearance']->where('name', 'theme')->first()->payload === 'dark' ? 'white' : 'black' }} hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline"
-                            href="{{ route('links') }}">Links</a>
-                        <a class="block px-4 py-2 mt-2 text-sm font-semibold text-gray-900 bg-transparent rounded-lg dark:bg-transparent dark:hover:bg-gray-600 dark:focus:bg-gray-600 dark:focus:text-white dark:hover:text-white text-{{ $groupedSettings['appearance']->where('name', 'theme')->first()->payload === 'dark' ? 'white' : 'black' }} hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline"
-                            href="{{ route('spaces') }}">Spaces</a>
-                        <a class="block px-4 py-2 mt-2 text-sm font-semibold text-gray-900 bg-transparent rounded-lg dark:bg-transparent dark:hover:bg-gray-600 dark:focus:bg-gray-600 dark:focus:text-white dark:hover:text-white text-{{ $groupedSettings['appearance']->where('name', 'theme')->first()->payload === 'dark' ? 'white' : 'black' }} hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline"
-                            href="{{ route('domains') }}">Domains</a>
-                        <a class="block px-4 py-2 mt-2 text-sm font-semibold text-gray-900 bg-transparent rounded-lg dark:bg-transparent dark:hover:bg-gray-600 dark:focus:bg-gray-600 dark:focus:text-white dark:hover:text-white text-{{ $groupedSettings['appearance']->where('name', 'theme')->first()->payload === 'dark' ? 'white' : 'black' }} hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline"
-                            href="{{ route('pixels') }}">Pixels</a>
+                        <a class="common-link text-{{ $textColorClass }} " href='{{ route('dashboard') }}'>Dashboard</a>
+                        <a class="common-link text-{{ $textColorClass }} " href="{{ route('links') }}">Links</a>
+                        <a class="common-link text-{{ $textColorClass }} " href="{{ route('spaces') }}">Spaces</a>
+                        <a class="common-link text-{{ $textColorClass }} " href="{{ route('domains') }}">Domains</a>
+                        <a class="common-link text-{{ $textColorClass }} " href="{{ route('pixels') }}">Pixels</a>
                         <form method="POST" action="{{ route('logout') }}" class="mt-4">
                             @csrf
                             <button type="submit"
-                                class="block w-full px-4 py-2 text-sm font-semibold text-gray-900 bg-transparent rounded-lg dark:bg-transparent dark:hover:bg-gray-600 dark:focus:bg-gray-600 dark:focus:text-white dark:hover:text-white text-{{ $groupedSettings['appearance']->where('name', 'theme')->first()->payload === 'dark' ? 'white' : 'black' }} hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline">
+                                class="block w-full px-4 py-2 text-sm font-semibold text-gray-900 bg-transparent rounded-lg dark:bg-transparent dark:hover:bg-gray-600 dark:focus:bg-gray-600 dark:focus:text-white dark:hover:text-white text-{{ $textColorClass }} hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline">
                                 Log Out
                             </button>
                         </form>
