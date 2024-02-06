@@ -1,55 +1,54 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\IndexController;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
+Route::view('/', 'welcome');
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::view('/dashboard', 'dashboard')->name('dashboard');
+    
+    Route::middleware(['auth', 'role:admin'])->group(function () {
+        // Admin routes
+        Route::prefix('/admin')->group(function () {//all the routes which comes under admin will be under this function
+            Route::view('/', 'admin.index')->name('admin.index');
+            Route::view('/pixels', 'pixels')->name('pixels');
+            Route::view('/spaces', 'spaces')->name('spaces');
+            Route::view('/links', 'links')->name('links');
+            Route::view('/domains', 'domains')->name('domains');
+            
+            Route::prefix('/general')->group(function () {//same another function for another prefixs
+                Route::get('/', [IndexController::class, 'setting'])->name('admin.setting');
+                Route::post('/update', [IndexController::class,'updateSettings'])->name('admin.general.update');
+            });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+            Route::prefix('/appearance')->group(function () {
+                Route::get('/', [IndexController::class, 'appearance'])->name('admin.appearance');
+                Route::post('/update', [IndexController::class,'updateappearance'])->name('admin.appearance.update');
+            });
 
-Route::get('/admin', function () {
-    return view('admin.index');
-})->middleware(['auth', 'role:admin'])->name('admin.index');
+            Route::prefix('/social')->group(function () {
+                Route::get('/', [IndexController::class, 'social'])->name('admin.social');
+                Route::post('/update', [IndexController::class,'updatesocial'])->name('admin.social.update');
+            });
 
-Route::get('/user', function () {
-    return view('user.user');
-})->middleware(['auth', 'role:user'])->name('user.user');
+            Route::prefix('/announcement')->group(function () {
+                Route::get('/', [IndexController::class, 'announcement'])->name('admin.announcement');
+                Route::post('/update', [IndexController::class,'updateannouncement'])->name('admin.announcement.update');
+            });
+        });
+    });
 
-Route::get('/pixels', function () {
-    return view('pixels');
-})->middleware(['auth', 'role:admin'])->name('pixels');
-
-Route::get('/spaces', function () {
-    return view('spaces');
-})->middleware(['auth', 'role:admin'])->name('spaces');
-
-Route::get('/links', function () {
-    return view('links');
-})->middleware(['auth', 'role:admin'])->name('links');
-
-Route::get('/domians', function () {
-    return view('domains');
-})->middleware(['auth', 'role:admin'])->name('domains');
-
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::middleware('auth')->group(function () {
+        // Profile routes
+        Route::prefix('/profile')->group(function () {
+            Route::get('/', [ProfileController::class, 'edit'])->name('profile.edit');
+            Route::patch('/', [ProfileController::class, 'update'])->name('profile.update');
+            Route::delete('/', [ProfileController::class, 'destroy'])->name('profile.destroy');
+        });
+    });
 });
 
 require __DIR__.'/auth.php';
+?>
