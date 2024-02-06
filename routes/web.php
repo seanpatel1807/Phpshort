@@ -22,6 +22,30 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::get('/admin', function () {
+    return view('admin.index');
+})->middleware(['auth', 'role:admin'])->name('admin.index');
+
+Route::get('/user', function () {
+    return view('user.user');
+})->middleware(['auth', 'role:user'])->name('user.user');
+
+Route::get('/pixels', function () {
+    return view('pixels');
+})->middleware(['auth', 'role:admin'])->name('pixels');
+
+Route::get('/spaces', function () {
+    return view('spaces');
+})->middleware(['auth', 'role:admin'])->name('spaces');
+
+Route::get('/links', function () {
+    return view('links');
+})->middleware(['auth', 'role:admin'])->name('links');
+
+Route::get('/domians', function () {
+    return view('domains');
+})->middleware(['auth', 'role:admin'])->name('domains');
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
