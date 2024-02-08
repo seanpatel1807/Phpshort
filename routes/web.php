@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\IndexController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\PageController;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'welcome');
@@ -19,9 +20,19 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::view('/spaces', 'spaces')->name('spaces');
             Route::view('/links', 'links')->name('links');
             Route::view('/domains', 'domains')->name('domains');
-            Route::get('/users', [UserController::class, 'Index'])->name('users');
-
             
+            Route::get('/users', [UserController::class, 'Index'])->name('users.index');
+            Route::get('/users/edit/{user}', [UserController::class, 'edit'])->name('user.edit');
+            Route::patch('/users/update/{user}', [UserController::class, 'update'])->name('user.update');
+            Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
+
+            Route::get('/pages', [PageController::class, 'Index'])->name('page.index');
+            Route::get('pages/create', [PageController::class, 'create'])->name('pages.create');
+            Route::post('pages/store', [PageController::class, 'store'])->name('pages.store');
+            Route::get('/pages/edit/{user}', [PageController::class, 'edit'])->name('pages.edit');
+            Route::patch('/pages/update/{user}', [PageController::class, 'update'])->name('pages.update');
+            Route::delete('/pages/{user}', [PageController::class, 'destroy'])->name('pages.destroy');
+
             Route::prefix('/general')->group(function () {//same another function for another prefixs
                 Route::get('/', [IndexController::class, 'setting'])->name('admin.setting');
                 Route::post('/update', [IndexController::class,'updateSettings'])->name('admin.general.update');
