@@ -1,6 +1,10 @@
 <x-admin-layout>
     <div class="container mx-auto p-8">
         <h1 class="text-3xl font-bold mb-6 text-gray-900">User List</h1>
+        <form action="{{ route('users.index') }}" method="GET" class="mb-4">
+            <input type="text" name="search" placeholder="Search users..." class="p-2 border rounded">
+            <button type="submit" class="px-4 py-2 bg-gray-800 text-white rounded">Search</button>
+        </form>
         <div class="overflow-x-auto">
             <table class="min-w-full bg-gray-200 text-black text-lg" style="width: 100%">
                 <thead>
