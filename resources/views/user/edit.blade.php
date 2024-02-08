@@ -2,7 +2,7 @@
     <div class="container mx-auto p-8 bg-gray-200 shadow-lg rounded-lg">
         <h1 class="text-3xl font-bold mb-6 text-black">Edit User</h1>
 
-        <form action="{{ route('user.update', ['user' => $user->id]) }}" method="post" class="max-w-md mx-auto">
+        <form action="{{ route('users.update', ['user' => $user->id]) }}" method="post" class="max-w-md mx-auto">
             @csrf
             @method('patch')
 

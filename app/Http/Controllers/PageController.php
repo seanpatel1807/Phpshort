@@ -15,12 +15,12 @@ class PageController extends Controller
             $query->where('name', 'like', '%' . $searchTerm . '%');
         })->get();
 
-        return view('page.index', ['page' => $pages, 'searchTerm' => $searchTerm]);
+        return view('pages.index', ['page' => $pages, 'searchTerm' => $searchTerm]);
     }
 
     public function create()
     {
-        return view('page.create');
+        return view('pages.create');
     }
 
     public function store(Request $request)
@@ -34,17 +34,17 @@ class PageController extends Controller
 
         Pages::create($validatedData);
 
-        return redirect()->route('page.index')->with('success', 'Page created successfully');
+        return redirect()->route('pages.index')->with('success', 'Page created successfully');
     }
 
     public function edit($id)
     {
         $pages = Pages::find($id);
 
-        return view('page.edit', ['page' => $pages]);
+        return view('pages.edit', ['page' => $pages]);
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request,$id)
     {
         $pages = Pages::find($id);
 
@@ -58,7 +58,7 @@ class PageController extends Controller
             
         ]);
 
-        return redirect()->route('page.index', $id)->with('success', 'Page updated successfully');
+        return redirect()->route('pages.index', $id)->with('success', 'Page updated successfully');
     }
 
     public function destroy($id)
@@ -66,6 +66,6 @@ class PageController extends Controller
         $pages = Pages::find($id);
         $pages->delete();
 
-        return redirect()->route('page.index')->with('success', 'Page deleted successfully');
+        return redirect()->route('pages.index')->with('success', 'Page deleted successfully');
     }
 }

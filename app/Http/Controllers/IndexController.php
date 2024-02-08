@@ -42,15 +42,15 @@ class IndexController extends Controller
         return redirect()->route($route);
     }
 
-    public function setting()
+    public function general()
     {
         $groupedSettings = $this->getGroupedSettings();
-        return view('admin.setting', compact('groupedSettings'));
+        return view('admin.general', compact('groupedSettings'));
     }
 
-    public function updateSettings(Request $request)
+    public function updateGeneral(Request $request)
     {
-        return $this->updateSettingsGroup($request, 'admin.setting');
+        return $this->updateSettingsGroup($request, 'admin.general');
     }
     
     public function social()
