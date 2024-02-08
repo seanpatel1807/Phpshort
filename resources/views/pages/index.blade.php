@@ -7,7 +7,7 @@
         </a>
     </div>
     <div class="container mx-auto p-8">
-        <h1 class="text-3xl font-bold mb-6 text-gray-900">User List</h1>
+        <h1 class="text-3xl font-bold mb-6 text-gray-900">Pages</h1>
         <div class="overflow-x-auto">
             <table class="min-w-full bg-gray-200 text-black text-lg" style="width: 100%">
                 <thead>
@@ -55,7 +55,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="3" class="py-4 px-6 text-center">No users found.</td>
+                            <td colspan="3" class="py-4 px-6 text-center">No pages found.</td>
                         </tr>
                     @endforelse
                 </tbody>
