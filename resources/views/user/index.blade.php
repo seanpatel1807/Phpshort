@@ -1,10 +1,18 @@
 <x-admin-layout>
     <div class="container mx-auto p-8">
-        <h1 class="text-3xl font-bold mb-6 text-gray-900">User List</h1>
-        <form action="{{ route('users.index') }}" method="GET" class="mb-4">
-            <input type="text" name="search" placeholder="Search users..." class="p-2 border rounded">
-            <button type="submit" class="px-4 py-2 bg-gray-800 text-white rounded">Search</button>
-        </form>
+        <h1 class="text-3xl font-bold mb-6 text-gray-900" style="font-size: 30px">User List</h1>
+        <div class="flex items-center mb-4">
+            <form action="{{ route('users.index') }}" method="GET" class="flex items-center">
+                <input type="text" name="search" placeholder="Search users..." class="p-2 border rounded">
+                <button type="submit" style="background-color: #7b60fb; color: white;"
+                    class="px-4 py-2 rounded ml-2">Search</button>
+            </form>
+            <a href="{{ route('users.create') }}"
+                style="display: inline-block; padding: 10px 20px; background-color: #7b60fb; color: #fff; text-decoration: none; border-radius: 5px; transition: background-color 0.3s; margin-left: auto;"
+                onmouseover="this.style.backgroundColor='#5e42eb'" onmouseout="this.style.backgroundColor='#7b60fb'">
+                New
+            </a>
+        </div>
         <div class="overflow-x-auto">
             <table class="min-w-full bg-gray-200 text-black text-lg" style="width: 100%">
                 <thead>
@@ -39,6 +47,16 @@
                                                 Edit
                                             </button>
                                         </form>
+                                        @canImpersonate($guard = null)
+                                        <form action="{{ route('impersonate', $user->id) }}" method="get"
+                                            class="inline">
+                                            @csrf
+                                            <button type="submit"
+                                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900">
+                                                Login
+                                            </button>
+                                        </form>
+                                        @endCanImpersonate
                                         <form action="{{ route('users.destroy', $user->id) }}" method="post"
                                             class="inline">
                                             @csrf
@@ -61,4 +79,24 @@
             </table>
         </div>
     </div>
+    @if (session('success'))
+        <div id="success-alert" class="bg-gray-800 border-l-4  text-white px-4 py-3 rounded relative mb-4 shadow-md"
+            role="alert">
+            <strong class="font-bold">Success!</strong>
+            <span class="block sm:inline">{{ session('success') }}</span>
+            <button id="close-alert" class="absolute top-0 right-0 px-3 py-1 focus:outline-none">
+                <span>&times;</span>
+            </button>
+        </div>
+
+        <script>
+            setTimeout(function() {
+                document.getElementById('success-alert').style.opacity = '0';
+                document.getElementById('success-alert').style.transition = 'opacity 0.5s';
+                setTimeout(function() {
+                    document.getElementById('success-alert').remove();
+                }, 500);
+            }, 5000);
+        </script>
+    @endif
 </x-admin-layout>

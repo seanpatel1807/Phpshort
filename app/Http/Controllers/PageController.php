@@ -29,7 +29,7 @@ class PageController extends Controller
             'name' => 'required|string|max:255',
             'slug' => 'required|string',
             'visibility' => 'required',
-            'content' => 'required|string|max:1000',
+            'content' => 'required|string|max:256',
         ]);
 
         Pages::create($validatedData);

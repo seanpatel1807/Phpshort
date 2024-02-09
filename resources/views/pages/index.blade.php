@@ -8,10 +8,11 @@
     </div>
     <form action="{{ route('pages.index') }}" method="GET" class="mb-4">
         <input type="text" name="search" placeholder="Search users..." class="p-2 border rounded">
-        <button type="submit" class="px-4 py-2 bg-gray-800 text-white rounded">Search</button>
+        <button type="submit" style="background-color: #7b60fb; color: white;"
+            class="px-4 py-2 rounded">Search</button>
     </form>
     <div class="container mx-auto p-8">
-        <h1 class="text-3xl font-bold mb-6 text-gray-900">Pages</h1>
+        <h1 class="font-bold mb-6 text-gray-900" style="font-size: 30px">Pages</h1>
         <div class="overflow-x-auto">
             <table class="min-w-full bg-gray-200 text-black text-lg" style="width: 100%">
                 <thead>
@@ -66,4 +67,24 @@
             </table>
         </div>
     </div>
+    @if (session('success'))
+        <div id="success-alert" class="bg-gray-800 border-l-4  text-white px-4 py-3 rounded relative mb-4 shadow-md"
+            role="alert">
+            <strong class="font-bold">Success!</strong>
+            <span class="block sm:inline">{{ session('success') }}</span>
+            <button id="close-alert" class="absolute top-0 right-0 px-3 py-1 focus:outline-none">
+                <span>&times;</span>
+            </button>
+        </div>
+
+        <script>
+            setTimeout(function() {
+                document.getElementById('success-alert').style.opacity = '0';
+                document.getElementById('success-alert').style.transition = 'opacity 0.5s';
+                setTimeout(function() {
+                    document.getElementById('success-alert').remove();
+                }, 500);
+            }, 5000);
+        </script>
+    @endif
 </x-admin-layout>

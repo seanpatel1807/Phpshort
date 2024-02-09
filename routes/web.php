@@ -7,6 +7,7 @@ use App\Http\Controllers\PageController;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'welcome');
+Route::impersonate();//it is used for logging in the user admin what directly
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::view('/dashboard', 'dashboard')->name('dashboard');
@@ -20,7 +21,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::view('/domains', 'domains')->name('domains');
 
             //resource is used if you want to have all the routes needed in crud operation
-            Route::resource('users', UserController::class)->only(['index', 'edit', 'update', 'destroy']);
+            Route::resource('users', UserController::class);
 
             Route::resource('pages', PageController::class);
 
