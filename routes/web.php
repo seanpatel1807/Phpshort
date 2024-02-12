@@ -5,9 +5,19 @@ use App\Http\Controllers\IndexController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PageController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\LinkController;
+
 
 Route::view('/', 'welcome');
 Route::impersonate();//it is used for logging in the user admin what directly
+
+Route::prefix('/user')->group(function () {
+    Route::view('/pixels', 'user.pixel')->name('user.pixel');
+    Route::view('/spaces', 'user.space')->name('user.space');
+    Route::view('/links', 'user.link')->name('user.link');
+    Route::view('/domains', 'user.domain')->name('user.domain');
+    });
+
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::view('/dashboard', 'dashboard')->name('dashboard');
@@ -35,7 +45,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         });
     });
 
-    Route::middleware('auth')->group(function () {
+Route::middleware('auth')->group(function () {
         Route::prefix('/profile')->group(function () {
             Route::get('/', [ProfileController::class, 'edit'])->name('profile.edit');
             Route::patch('/', [ProfileController::class, 'update'])->name('profile.update');
@@ -45,4 +55,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 require __DIR__.'/auth.php';
-?>
+
+Route::post('/create-link', [LinkController::class, 'create']);
+Route::get('/{shortUrl}', [LinkController::class, 'redirect']);
