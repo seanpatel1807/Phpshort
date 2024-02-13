@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use Lab404\Impersonate\Models\Impersonate;
+use Illuminate\Database\Eloquent\Model;
 //ama hasrole vadu mukvanu 
 
 class User extends Authenticatable
@@ -45,4 +46,9 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+    public function links()
+    {
+        return $this->hasMany(Link::class);
+    }
 }
+ 
