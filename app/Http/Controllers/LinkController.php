@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Link;
+use App\Models\Space;
 use Illuminate\Http\Request;
 
 class LinkController extends Controller
@@ -19,14 +20,16 @@ class LinkController extends Controller
             $shortUrl = $existingLink->short_url;
             $message = 'This URL already has a short link.';
         } else {
-            $shortUrl = Link::generateShortUrl($request->input('original_url'));
+            $shortUrl = Link::generateShortUrl($request->all());
             $message = null;
         }
 
-        // Fetch all links
         $allLinks = Link::all();
-        return view('user.link', compact('shortUrl', 'message', 'allLinks'));
+        $allSpaces = Space::all();
+
+        return view('user.link', compact('shortUrl', 'message', 'allLinks', 'allSpaces'));
     }
+
 
     public function redirect($shortUrl)
     {
@@ -41,12 +44,16 @@ class LinkController extends Controller
         abort(404);
     }
 
+
     public function index()
     {
         $allLinks = Link::all();
-        return view('user.link', compact('allLinks'));
+        $allSpaces = Space::all();
+
+        return view('user.link', compact('allLinks', 'allSpaces'));
     }
 
+    
     public function delete($id)
     {
         $link = Link::find($id);

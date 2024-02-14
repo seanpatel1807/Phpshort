@@ -83,34 +83,35 @@
                 </script>
             @endif
 
-            <div id="short-link" class="short-link show">
-                <p>
-                    Short Link:
-                    @isset($shortUrl)
+            @if (isset($shortUrl))
+                <div id="short-link" class="short-link show">
+                    <p>
+                        Short Link:
                         <a href="{{ $shortUrl }}" target="blank">{{ $shortUrl }}</a>
-                    @else
-                        No link available
-                    @endisset
-                </p>
-            </div>
+                    </p>
+                </div>
 
-            <script>
-                setTimeout(function() {
-                    document.getElementById('short-link').style.opacity = '0';
+                <script>
                     setTimeout(function() {
-                        document.getElementById('short-link').style.display = 'none';
-                    }, 500);
-                }, 5000);
-            </script>
-
+                        document.getElementById('short-link').style.opacity = '0';
+                        setTimeout(function() {
+                            document.getElementById('short-link').style.display = 'none';
+                        }, 500);
+                    }, 5000);
+                </script>
+            @endif
             <form method="POST" action="/create-link" class="flex" style="gap:10px">
                 @csrf
                 <textarea class="w-full" type="url" id="original_url" name="original_url" placeholder="Type or paste the link"
                     required></textarea>
+                <select name="space_id" id="space_id" class="custom-dropdown">
+                    @foreach ($allSpaces as $space)
+                        <option value="{{ $space->id }}">{{ $space->space_name }}</option>
+                    @endforeach
+                </select>
                 <button type="submit" style="background-color:#7b60fb; padding:10px">Shorten</button>
             </form>
         </div>
-
         <h2>All Links:</h2>
 
         <table class="links-table">
@@ -125,7 +126,8 @@
             <tbody>
                 @foreach ($allLinks as $link)
                     <tr>
-                        <td><a href="{{ $link->short_url }}" target="_blank">https://127.0.0.1:8000/{{ $link->short_url }}</a></td>
+                        <td><a href="{{ $link->short_url }}"
+                                target="_blank">https://127.0.0.1:8000/{{ $link->short_url }}</a></td>
                         <td>{{ $link->click_count }}</td>
                         <td>{{ $link->created_at }}</td>
                         <td>

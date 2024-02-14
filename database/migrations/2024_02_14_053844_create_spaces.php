@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('links', function (Blueprint $table) {
-            $table->unsignedInteger('click_count')->default(0);
-            
+        Schema::create('spaces', function (Blueprint $table) {
+            $table->id();
+            $table->string('space_name');
+            $table->unsignedInteger('links')->default(0);
+            $table->timestamps();
         });
     }
 
@@ -22,8 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('links', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('spaces');
     }
 };

@@ -6,6 +6,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\LinkController;
 use App\Http\Controllers\DataController;
+use App\Http\Controllers\SpaceController;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'welcome');
@@ -13,10 +14,11 @@ Route::impersonate(); // Used for logging in the user admin directly
 
 Route::prefix('/user')->group(function () {
     Route::view('/pixels', 'user.pixel')->name('user.pixel');
-    Route::view('/spaces', 'user.space')->name('user.space');
-    Route::get('/links', [LinkController::class, 'index'])->name('user.link');
-    Route::post('/create-link', [LinkController::class, 'create']);
-    Route::get('/{shortUrl}', [LinkController::class, 'redirect']);
+    Route::get('/spaces', [SpaceController::class, 'showSpaces'])->name('user.space');
+    Route::post('/store-space', [SpaceController::class, 'store'])->name('storeSpace');
+Route::get('/show-form', [SpaceController::class, 'showForm'])->name('showForm');
+Route::get('/links', [LinkController::class, 'index'])->name('user.link');
+
     Route::delete('/delete-link/{id}', [LinkController::class, 'delete'])->name('delete.link');
     Route::view('/domains', 'user.domain')->name('user.domain');
 });
@@ -32,7 +34,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('/links', [DataController::class, 'data'])->name('links');
             Route::get('/{shortUrl}', [DataController::class, 'redirect']);
             Route::view('/domains', 'domains')->name('domains');
-
             Route::resource('users', UserController::class);
             Route::resource('pages', PageController::class);
 
@@ -56,3 +57,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+Route::post('/create-link', [LinkController::class, 'create']);
+Route::get('/{shortUrl}', [LinkController::class, 'redirect']);

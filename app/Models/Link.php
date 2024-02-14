@@ -10,19 +10,21 @@ class Link extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'original_url', 'short_url', 'expiration_date'];
+    protected $fillable = ['user_id', 'original_url', 'short_url', 'expiration_date','spaces_id'];
 
-    public static function generateShortUrl($originalUrl)
+    public static function generateShortUrl($request)
     {
-        $hashids = substr(md5($originalUrl), 0, 6);
+        $hashids = substr(md5($request['original_url']), 0, 6);
         $expirationDate = now()->addDays(30);
         $user = auth()->user();
+        
 
         $link = self::create([
-            'original_url' => $originalUrl,
+            'original_url' => $request['original_url'],
             'short_url' => $hashids,
             'expiration_date' => $expirationDate,
             'user_id' => $user->id,
+            'spaces_id'=>$request['space_id'],
         ]);
 
         return $link->short_url;
@@ -32,4 +34,5 @@ class Link extends Model
     {
         return $this->belongsTo(User::class);
     }
+    
 }
