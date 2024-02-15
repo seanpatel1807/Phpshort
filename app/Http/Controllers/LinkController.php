@@ -66,6 +66,6 @@ class LinkController extends Controller
 
         $allLinks = Link::all();
 
-        return view('user.link', compact('allLinks'))->with('success', 'Link deleted successfully.');
+        return  redirect(route('user.link'));
     }
 }

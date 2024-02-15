@@ -30,4 +30,17 @@ class SpaceController extends Controller
         $spaces = Space::withCount('links')->get();
         return view('user.space', compact('spaces'));
     }
+    public function deleteSpace($id)
+    {
+        $space = Space::find($id);
+
+        if (!$space) {
+            return redirect()->back()->with('error', 'Space not found!');
+        }
+
+        $space->delete();
+
+        return redirect()->back()->with('success', 'Space deleted successfully!');
+    }
+    
 }

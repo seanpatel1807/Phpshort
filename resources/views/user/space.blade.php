@@ -31,19 +31,25 @@
     <table class="links-table">
         <thead>
             <tr>
-                <th>ID</th>
                 <th>Name</th>
                 <th>Links</th>
                 <th>Created at</th>
+                <th>function</th>
             </tr>
         </thead>
         <tbody>
             @foreach ($spaces as $space)
                 <tr>
-                    <td>{{ $space->id }}</td>
                     <td>{{ $space->space_name }}</td>
                     <td>{{ $space->links_count }}</td>
                     <td>{{ $space->created_at }}</td>
+                    <td>
+                        <form action="{{ route('spaces.delete', $space->id) }}" method="post">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" style="background-color: red;color:white;padding:3px">Delete</button>
+                        </form>
+                    </td>
                 </tr>
             @endforeach
         </tbody>
