@@ -37,7 +37,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::prefix('/admin')->group(function () {
             Route::view('/', 'admin.index')->name('admin.index');
             Route::view('/pixels', 'pixels')->name('pixels');
-            Route::view('/spaces', 'spaces')->name('spaces'); 
+            Route::get('/spaces', [SpaceController::class, 'index'])->name('spaces');
             Route::view('/domains', 'domains')->name('domains');
             Route::resource('users', UserController::class);
             Route::resource('pages', PageController::class);

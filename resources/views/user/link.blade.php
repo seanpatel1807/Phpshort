@@ -109,6 +109,8 @@
                         <option value="{{ $space->id }}">{{ $space->space_name }}</option>
                     @endforeach
                 </select>
+                <input type="text" name="custom_alias" pattern="[a-zA-Z0-9-_]+" placeholder="Custom alias"
+                    title="Only letters, numbers, dashes, and underscores are allowed.">
                 <button type="submit" style="background-color:#7b60fb; padding:10px">Shorten</button>
             </form>
         </div>

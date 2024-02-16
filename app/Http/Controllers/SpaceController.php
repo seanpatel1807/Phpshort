@@ -42,5 +42,10 @@ class SpaceController extends Controller
 
         return redirect()->back()->with('success', 'Space deleted successfully!');
     }
-    
+    public function index()
+    {
+        $spaces = Space::with('user')->get();
+        
+        return view('spaces', compact('spaces'));
+    }
 }
