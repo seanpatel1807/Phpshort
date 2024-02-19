@@ -108,7 +108,7 @@
                         </button>
                         <div id="settings-links" class="hidden">
                             <a class="common-link" href="{{ route('admin.general') }}">General</a>
-
+                            <a class="common-link" href="{{ route('admin.advanced') }}">Advanced</a>
                             <a class="common-link" href="{{ route('admin.appearance') }}">Appearance</a>
 
                             <a class="common-link" href="{{ route('admin.social') }}">Social</a>
@@ -134,4 +134,5 @@
         </div>
     </div>
 </body>
+
 </html>

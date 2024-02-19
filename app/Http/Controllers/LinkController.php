@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Link;
 use App\Models\Space;
 use Illuminate\Http\Request;
+
 
 class LinkController extends Controller
 {
@@ -44,7 +46,6 @@ class LinkController extends Controller
         abort(404);
     }
 
-
     public function index()
     {
         $allLinks = Link::all();
@@ -53,7 +54,6 @@ class LinkController extends Controller
         return view('user.link', compact('allLinks', 'allSpaces'));
     }
 
-    
     public function delete($id)
     {
         $link = Link::find($id);
@@ -66,6 +66,45 @@ class LinkController extends Controller
 
         $allLinks = Link::all();
 
-        return  redirect(route('user.link'));
+        return  redirect()->back();
+    }
+
+
+
+    public function edit($id)
+    {
+        $link = Link::find($id);
+
+        if (!$link) {
+            return redirect()->back()->withErrors(['Link not found.']);
+        }
+
+        $allSpaces = Space::all();
+
+        return view('edit_link', compact('link', 'allSpaces'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $link = Link::find($id);
+
+        if (!$link) {
+            return redirect()->back()->withErrors(['Link not found.']);
+        }
+
+        $request->validate([
+            'original_url' => 'required|url',
+            'short_url'=> 'required',
+            'space_name'=>'required',
+        ]);
+
+        $link->original_url = $request->input('original_url');
+        $link->short_url = $request->input('short_url');
+        $link->spaces_id = $request->input('space_name');
+
+
+        $link->save();
+
+        return redirect()->back()->with('success', 'Link updated successfully.');
     }
 }

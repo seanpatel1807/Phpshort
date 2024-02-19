@@ -128,8 +128,9 @@
             <tbody>
                 @foreach ($allLinks as $link)
                     <tr>
-                        <td><a href="{{ $link->short_url }}"
+                        <td><a href="/{{ $link->short_url }}"
                                 target="_blank">https://127.0.0.1:8000/{{ $link->short_url }}</a></td>
+                        {{-- / is used if we return redirect back so it by default takes user or admin --}}
                         <td>{{ $link->click_count }}</td>
                         <td>{{ $link->created_at }}</td>
                         <td>
@@ -139,6 +140,12 @@
                                 <button type="submit"
                                     onclick="return confirm('Are you sure you want to delete this link?')"
                                     class="delete-button">Delete</button>
+                            </form>
+                        </td>
+                        <td>
+                            <form action="{{ route('link.edit', ['id' => $link->id]) }}" method="get">
+                                @csrf
+                                <button type="submit">Edit</button>
                             </form>
                         </td>
                     </tr>

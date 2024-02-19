@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('links', function (Blueprint $table) {
-            //  $table->foreignId('space_id')->constrained();
+        Schema::table('spaces', function (Blueprint $table) {
+            $table->foreignId('users_id')->constrained()->default(0); 
         });
     }
 
@@ -21,7 +21,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('links', function (Blueprint $table) {
+        Schema::table('spaces', function (Blueprint $table) {
             //
         });
     }

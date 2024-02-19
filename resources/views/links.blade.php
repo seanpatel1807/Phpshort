@@ -30,6 +30,7 @@
             }
         </style>
     </head>
+
     <body>
         <table>
             <thead>
@@ -46,10 +47,26 @@
                                 target="_blank">https://127.0.0.1:8000/{{ $link->short_url }}</a></td>
                         <td>{{ $link->user->name }}</td>
                         <td>{{ $link->click_count }}</td>
+                        <td>
+                            <form action="{{ route('delete.link', ['id' => $link->id]) }}" method="post">
+                                @csrf
+                                @method('delete')
+                                <button type="submit"
+                                    onclick="return confirm('Are you sure you want to delete this link?')"
+                                    class="delete-button">Delete</button>
+                            </form>
+                        </td>
+                        <td>
+                            <form action="{{ route('link.edit', ['id' => $link->id]) }}" method="get">
+                                @csrf
+                                <button type="submit">Edit</button>
+                            </form>
+                        </td>
                     </tr>
                 @endforeach
             </tbody>
         </table>
     </body>
+
     </html>
 </x-admin-layout>

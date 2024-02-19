@@ -50,5 +50,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Link::class);
     }
+    public function spaces()
+    {
+        return $this->hasMany(Space::class);
+    }
 }
  

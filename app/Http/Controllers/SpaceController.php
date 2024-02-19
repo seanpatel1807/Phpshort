@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Space;
+use Illuminate\Support\Facades\DB;
+
 
 class SpaceController extends Controller
 {
@@ -13,13 +15,15 @@ class SpaceController extends Controller
     }
 
     public function store(Request $request)
-    {
+    {   
         $request->validate([
             'value' => 'required|string|max:255',
         ]);
-
+         
+        $user = auth()->user();
         Space::create([
             'space_name' => $request->input('value'),
+            'users_id' => $user->id,
         ]);
 
         return redirect()->back()->with('success', 'Value stored successfully!');
@@ -39,13 +43,21 @@ class SpaceController extends Controller
         }
 
         $space->delete();
-
         return redirect()->back()->with('success', 'Space deleted successfully!');
     }
-    public function index()
+    public function data()
     {
-        $spaces = Space::with('user')->get();
-        
-        return view('spaces', compact('spaces'));
+
+    $user = DB::table('spaces')
+    ->join('users', 'users.id', '=', 'spaces.users_id')
+    ->select(
+        'spaces.*',
+        'users.name as user_name',
+        'users.email as user_email',
+        DB::raw('(SELECT COUNT(*) FROM links WHERE links.spaces_id = spaces.id) as links_count')
+    )
+    ->get();
+       
+        return view('spaces', compact('user'));
     }
 }

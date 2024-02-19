@@ -85,6 +85,17 @@ class IndexController extends Controller
     {    
         return $this->updateSettingsGroup($request, 'admin.appearance');
     }
+    public function advanced()
+    {
+        $groupedSettings = $this->getGroupedSettings();//call the function which contains the main function
+        return view('admin.advanced', compact('groupedSettings'));        
+    }
+
+    public function updateadvanced(Request $request)
+    {    
+        return $this->updateSettingsGroup($request, 'admin.advanced');
+    }
+
 
     private function getGroupedSettings()//just made a function which contains all the common functionalities 
     {

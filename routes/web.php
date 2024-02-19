@@ -17,6 +17,8 @@ Route::impersonate();
 // User Routes
 Route::prefix('/user')->middleware(['auth', 'verified'])->group(function () {
     Route::get('/links', [LinkController::class, 'index'])->name('user.link');
+    Route::get('/links/{id}/edit', [LinkController::class, 'edit'])->name('link.edit');
+    Route::post('/links/{id}', [LinkController::class, 'update'])->name('link.update');
     Route::delete('/delete-link/{id}', [LinkController::class, 'delete'])->name('delete.link');
     Route::view('/pixels', 'user.pixel')->name('user.pixel');
     Route::view('/domains', 'user.domain')->name('user.domain'); 
@@ -37,12 +39,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::prefix('/admin')->group(function () {
             Route::view('/', 'admin.index')->name('admin.index');
             Route::view('/pixels', 'pixels')->name('pixels');
-            Route::get('/spaces', [SpaceController::class, 'index'])->name('spaces');
+            Route::get('/spaces', [SpaceController::class, 'data'])->name('spaces');
             Route::view('/domains', 'domains')->name('domains');
             Route::resource('users', UserController::class);
             Route::resource('pages', PageController::class);
            
-            $adminRoutes = ['general', 'appearance', 'social', 'announcement'];
+            $adminRoutes = ['general', 'appearance', 'social', 'announcement','advanced'];
             foreach ($adminRoutes as $route) {
                 Route::prefix("/$route")->group(function () use ($route) {
                     Route::get('/', [IndexController::class, $route])->name("admin.$route");
