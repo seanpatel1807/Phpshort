@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 
 class SpaceController extends Controller
 {
-    public function showForm()
+    public function create()
     {
         return view('user.new');
     }
@@ -34,7 +34,7 @@ class SpaceController extends Controller
         $spaces = Space::withCount('links')->get();
         return view('user.space', compact('spaces'));
     }
-    public function deleteSpace($id)
+    public function delete($id)
     {
         $space = Space::find($id);
 
@@ -59,5 +59,33 @@ class SpaceController extends Controller
     ->get();
        
         return view('spaces', compact('user'));
+    }
+    public function edit($id)
+{
+    $space = Space::find($id);
+
+    if (!$space) {
+        return redirect()->back()->withErrors(['Space not found.']);
+    }
+
+    return view('edit_space', compact('space'));
+}
+public function update(Request $request, $id)
+    {
+        $space = Space::find($id);
+
+        if (!$space) {
+            return redirect()->back()->withErrors(['Link not found.']);
+        }
+
+        $request->validate([
+            'space_name' => 'required',
+        ]);
+
+        $space->space_name = $request->input('space_name');
+        
+        $space->save();
+
+        return redirect()->back()->with('success', 'Link updated successfully.');
     }
 }

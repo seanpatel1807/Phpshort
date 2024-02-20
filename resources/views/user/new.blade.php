@@ -2,7 +2,7 @@
     <div class="max-w-2xl mx-auto mt-6 p-6 bg-white rounded-md shadow-md">
         <h2 class="text-2xl font-semibold mb-6">Create a New Space</h2>
 
-        <form method="POST" action="{{ route('storeSpace') }}" id="valueForm">
+        <form method="POST" action="{{ route('store') }}" id="valueForm">
             @csrf
 
             <div class="mb-4">
@@ -12,7 +12,8 @@
             </div>
 
             <div class="flex items-center justify-end mt-6">
-                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" style="background-color: #7b60fb;color:white">
+                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                    style="background-color: #7b60fb;color:white">
                     Save
                 </button>
             </div>

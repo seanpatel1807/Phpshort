@@ -22,7 +22,7 @@
     </head>
     <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px;">
         <h2>Spaces:</h2>
-        <a href="{{ route('showForm') }}" style="text-decoration: none;">
+        <a href="{{ route('create') }}" style="text-decoration: none;">
             <button style="padding: 10px; background-color: #7b60fb; color: #fff; border: none; cursor: pointer;">
                 New
             </button>
@@ -50,6 +50,10 @@
                             <button type="submit" style="background-color: red;color:white;padding:3px">Delete</button>
                         </form>
                     </td>
+                    <td> <a href="{{ route('spaces.edit', $space->id) }}" style="text-decoration: none;">
+                            <button
+                                style="background-color: #3490dc; color: white; padding: 3px; margin-left: 5px;">Edit</button>
+                        </a></td>
                 </tr>
             @endforeach
         </tbody>

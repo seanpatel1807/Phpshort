@@ -24,9 +24,12 @@ Route::prefix('/user')->middleware(['auth', 'verified'])->group(function () {
     Route::view('/domains', 'user.domain')->name('user.domain'); 
     
     Route::get('/spaces', [SpaceController::class, 'showSpaces'])->name('user.space');
-    Route::post('/store-space', [SpaceController::class, 'store'])->name('storeSpace');
-    Route::get('/show-form', [SpaceController::class, 'showForm'])->name('showForm');
-    Route::delete('/spaces/{id}', [SpaceController::class, 'deleteSpace'])->name('spaces.delete');
+    Route::post('/store', [SpaceController::class, 'store'])->name('store');
+    Route::get('/create', [SpaceController::class, 'create'])->name('create');
+    Route::get('/spaces/{id}/edit', [SpaceController::class, 'edit'])->name('spaces.edit');
+    Route::post('/spaces/{id}', [SpaceController::class, 'update'])->name('spaces.update');
+    Route::delete('/spaces/{id}', [SpaceController::class, 'delete'])->name('spaces.delete');
+    
 
 });
 
