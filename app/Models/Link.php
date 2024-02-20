@@ -10,7 +10,7 @@ class Link extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'original_url', 'short_url', 'expiration_date','spaces_id'];
+    protected $fillable = ['user_id', 'original_url', 'short_url', 'expiration_date','spaces_id','pixels_id'];
 
     public static function generateShortUrl($request)
 {
@@ -40,6 +40,7 @@ class Link extends Model
         'expiration_date' => $expirationDate,
         'user_id' => $user->id,
         'spaces_id' => $request['space_id'],
+        'pixels_id' => $request['pixels_id'],
     ]);
 
     return $link->short_url;

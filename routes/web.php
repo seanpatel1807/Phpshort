@@ -6,6 +6,7 @@ use App\Http\Controllers\PageController;
 use App\Http\Controllers\LinkController;
 use App\Http\Controllers\DataController;
 use App\Http\Controllers\SpaceController;
+use App\Http\Controllers\PixelController;
 use Illuminate\Support\Facades\Route;
 
 // Public Routes
@@ -20,7 +21,12 @@ Route::prefix('/user')->middleware(['auth', 'verified'])->group(function () {
     Route::get('/links/{id}/edit', [LinkController::class, 'edit'])->name('link.edit');
     Route::post('/links/{id}', [LinkController::class, 'update'])->name('link.update');
     Route::delete('/delete-link/{id}', [LinkController::class, 'delete'])->name('delete.link');
-    Route::view('/pixels', 'user.pixel')->name('user.pixel');
+    Route::get('/pixels', [PixelController::class, 'index'])->name('user.pixel');
+    Route::get('/pixels/create', [PixelController::class, 'create'])->name('pixel.create');
+    Route::post('/pixels', [PixelController::class, 'store'])->name('pixel.store');
+    Route::delete('/pixels/{id}', [PixelController::class, 'destroy'])->name('pixels.destroy');
+    Route::get('/pixels/{id}/edit', [PixelController::class, 'edit'])->name('pixels.edit');
+Route::patch('/pixels/{id}', [PixelController::class, 'update'])->name('pixels.update');
     Route::view('/domains', 'user.domain')->name('user.domain'); 
     
     Route::get('/spaces', [SpaceController::class, 'showSpaces'])->name('user.space');
@@ -73,5 +79,3 @@ require __DIR__.'/auth.php';
 // Public Link Routes
 Route::post('/create-link', [LinkController::class, 'create']);
 Route::get('/{shortUrl}', [LinkController::class, 'redirect']);
-
-

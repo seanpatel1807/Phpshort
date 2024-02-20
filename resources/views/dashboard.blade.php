@@ -65,11 +65,6 @@
                 <a href="{{ route('user.pixel') }}" class="nav-link">Pixels</a>
             </div>
         </div>
-
-        <!-- The rest of your HTML content goes here -->
-
     </body>
-
     </html>
-
 </x-app-layout>

@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Link;
 use App\Models\Space;
+use App\Models\Pixel;
 use Illuminate\Http\Request;
-
 
 class LinkController extends Controller
 {
@@ -28,8 +28,8 @@ class LinkController extends Controller
 
         $allLinks = Link::all();
         $allSpaces = Space::all();
-
-        return view('user.link', compact('shortUrl', 'message', 'allLinks', 'allSpaces'));
+        $allPixels = Pixel::all();
+        return view('user.link', compact('shortUrl', 'message', 'allLinks', 'allSpaces','allPixels'));
     }
 
 
@@ -50,8 +50,8 @@ class LinkController extends Controller
     {
         $allLinks = Link::all();
         $allSpaces = Space::all();
-
-        return view('user.link', compact('allLinks', 'allSpaces'));
+        $allPixels = Pixel::all();
+        return view('user.link', compact('allLinks', 'allSpaces','allPixels'));
     }
 
     public function delete($id)
@@ -68,8 +68,6 @@ class LinkController extends Controller
 
         return  redirect()->back();
     }
-
-
 
     public function edit($id)
     {
@@ -101,7 +99,6 @@ class LinkController extends Controller
         $link->original_url = $request->input('original_url');
         $link->short_url = $request->input('short_url');
         $link->spaces_id = $request->input('space_name');
-
 
         $link->save();
 
