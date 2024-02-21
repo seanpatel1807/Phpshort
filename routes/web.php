@@ -19,22 +19,27 @@ Route::impersonate();
 Route::prefix('/user')->middleware(['auth', 'verified'])->group(function () {
     Route::get('/links', [LinkController::class, 'index'])->name('user.link');
     Route::get('/links/{id}/edit', [LinkController::class, 'edit'])->name('link.edit');
-    Route::post('/links/{id}', [LinkController::class, 'update'])->name('link.update');
+    Route::patch('/links/{id}', [LinkController::class, 'update'])->name('link.update');
     Route::delete('/delete-link/{id}', [LinkController::class, 'delete'])->name('delete.link');
-    Route::get('/pixels', [PixelController::class, 'index'])->name('user.pixel');
-    Route::get('/pixels/create', [PixelController::class, 'create'])->name('pixel.create');
-    Route::post('/pixels', [PixelController::class, 'store'])->name('pixel.store');
     Route::delete('/pixels/{id}', [PixelController::class, 'destroy'])->name('pixels.destroy');
     Route::get('/pixels/{id}/edit', [PixelController::class, 'edit'])->name('pixels.edit');
-Route::patch('/pixels/{id}', [PixelController::class, 'update'])->name('pixels.update');
+    Route::patch('/pixels/{id}', [PixelController::class, 'update'])->name('pixels.update');
+    Route::resource('pixels', PixelController::class)->only(['index','create','store'])->names([
+        'index' => 'user.pixel',
+    'create' => 'pixel.create',
+    'store'=>'pixel.store',
+    ]);
+    
     Route::view('/domains', 'user.domain')->name('user.domain'); 
     
-    Route::get('/spaces', [SpaceController::class, 'showSpaces'])->name('user.space');
-    Route::post('/store', [SpaceController::class, 'store'])->name('store');
-    Route::get('/create', [SpaceController::class, 'create'])->name('create');
-    Route::get('/spaces/{id}/edit', [SpaceController::class, 'edit'])->name('spaces.edit');
+    Route::resource('spaces', SpaceController::class)->except(['show'])->names([
+        'create' => 'create',
+        'store' => 'store',
+        'edit' => 'spaces.edit',
+        'destroy' =>'spaces.delete',
+        'index'=>'user.space',
+    ]);
     Route::post('/spaces/{id}', [SpaceController::class, 'update'])->name('spaces.update');
-    Route::delete('/spaces/{id}', [SpaceController::class, 'delete'])->name('spaces.delete');
     
 
 });
@@ -47,7 +52,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::prefix('/admin')->group(function () {
             Route::view('/', 'admin.index')->name('admin.index');
-            Route::view('/pixels', 'pixels')->name('pixels');
+            Route::get('/pixels', [PixelController::class, 'data'])->name('pixels');
             Route::get('/spaces', [SpaceController::class, 'data'])->name('spaces');
             Route::view('/domains', 'domains')->name('domains');
             Route::resource('users', UserController::class);

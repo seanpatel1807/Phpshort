@@ -29,12 +29,12 @@ class SpaceController extends Controller
         return redirect()->back()->with('success', 'Value stored successfully!');
     }
 
-    public function showSpaces()
+    public function index()
     {
         $spaces = Space::withCount('links')->get();
         return view('user.space', compact('spaces'));
     }
-    public function delete($id)
+    public function destroy($id)
     {
         $space = Space::find($id);
 

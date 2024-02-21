@@ -20,10 +20,12 @@ class PixelController extends Controller
             'name' => 'required|string',
             'type' => 'required|string',
         ]);
+        $user = auth()->user();
 
         Pixel::create([
             'name' => $request->input('name'),
             'type' => $request->input('type'),
+            'users_id' => $user->id,
         ]);
         
 
@@ -48,7 +50,7 @@ class PixelController extends Controller
     }
     public function edit($id)
     {
-        $pixel = Pixel::findOrFail($id);
+        $pixel = Pixel::find($id);
         return view('pixels.edit', compact('pixel'));
     }
 
@@ -59,7 +61,7 @@ class PixelController extends Controller
             'type' => 'required|string',
         ]);
 
-        $pixel = Pixel::findOrFail($id);
+        $pixel = Pixel::find($id);
         $pixel->update([
             'name' => $request->input('name'),
             'type' => $request->input('type'),
@@ -67,4 +69,19 @@ class PixelController extends Controller
 
         return redirect()->route('user.pixel')->with('success', 'Pixel updated successfully!');
     }    
+    public function data()
+    {
+
+    $user = DB::table('pixels')
+    ->join('users', 'users.id', '=', 'pixels.users_id')
+    ->select(
+        'pixels.*',
+        'users.name as user_name',
+        'users.email as user_email',
+        DB::raw('(SELECT COUNT(*) FROM links WHERE links.pixels_id = pixels.id) as links_count')
+    )
+    ->get();
+       
+        return view('pixels', compact('user'));
+    }
 }

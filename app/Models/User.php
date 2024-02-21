@@ -54,5 +54,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Space::class);
     }
+    public function pixles()
+    {
+        return $this->hasMany(Pixel::class);
+    }
 }
  

@@ -12,25 +12,26 @@ class LinkController extends Controller
 {
     public function create(Request $request)
     {
-        $request->validate([
-            'original_url' => 'required|url',
-        ]);
-
-        $existingLink = Link::where('original_url', $request->input('original_url'))->first();
+        $originalUrls = explode("\n", $request->input('original_url'));
+        $originalUrls = array_map('trim', $originalUrls);
+        foreach ($originalUrls as $originalUrl){
+            
+        $existingLink = Link::where('original_url',$originalUrl )->first();
 
         if ($existingLink) {
             $shortUrl = $existingLink->short_url;
             $message = 'This URL already has a short link.';
         } else {
-            $shortUrl = Link::generateShortUrl($request->all());
+            $shortUrl = Link::generateShortUrl($request->all(),$originalUrl );
             $message = null;
         }
-
+    }
         $allLinks = Link::all();
         $allSpaces = Space::all();
         $allPixels = Pixel::all();
         return view('user.link', compact('shortUrl', 'message', 'allLinks', 'allSpaces','allPixels'));
     }
+
 
 
     public function redirect($shortUrl)
@@ -78,8 +79,8 @@ class LinkController extends Controller
         }
 
         $allSpaces = Space::all();
-
-        return view('edit_link', compact('link', 'allSpaces'));
+        $allPixels = Pixel::all();
+        return view('edit_link', compact('link', 'allSpaces','allPixels'));
     }
 
     public function update(Request $request, $id)
@@ -89,16 +90,13 @@ class LinkController extends Controller
         if (!$link) {
             return redirect()->back()->withErrors(['Link not found.']);
         }
-
-        $request->validate([
-            'original_url' => 'required|url',
-            'short_url'=> 'required',
-            'space_name'=>'required',
-        ]);
-
+        
         $link->original_url = $request->input('original_url');
+        $link->spaces_id = $request->input('space_id');
         $link->short_url = $request->input('short_url');
-        $link->spaces_id = $request->input('space_name');
+        $link->pixels_id = $request->input('pixels_id');
+
+        
 
         $link->save();
 

@@ -70,7 +70,12 @@
                     <input type="text" class="form-control" name="short_url" pattern="[a-zA-Z0-9-_]+"
                         placeholder="Only letters, numbers, dashes, and underscores are allowed." title="Custom Alias">
                 </div>
-
+                <select name="pixels_id" id="pixels_id" class="custom-dropdown">
+                    @foreach ($allPixels as $pixel)
+                        <option value="{{ $pixel->id }}"{{ $link->space_id == $pixel->id ? 'selected' : '' }}>
+                            {{ $pixel->name }}</option>
+                    @endforeach
+                </select>
                 <button type="submit" class="btn btn-custom">Update Link</button>
             </form>
         </div>
