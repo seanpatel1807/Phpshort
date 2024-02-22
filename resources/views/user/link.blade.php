@@ -4,15 +4,19 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!-- Include Font Awesome for the cog icon -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+            integrity="sha512-RECEwJw5AeMu6p0oCkJKoVfwoQrBF1Y86hD/3zsZv7Cz5gOECM9D3AgpKsLsBtcdLp+I9uqov8FX1FssGpKjlg=="
+            crossorigin="anonymous" />
+
         <style>
             .message-box {
                 background-color: #4CAF50;
                 color: white;
                 padding: 15px;
                 margin-bottom: 20px;
-                display: block;
                 border-radius: 8px;
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
                 transition: opacity 0.5s ease-in-out;
             }
 
@@ -63,7 +67,36 @@
                 border-radius: 5px;
                 cursor: pointer;
             }
+
+            /* Styling for the settings button and container */
+            #settingsContainer {
+                display: none;
+                margin-top: 10px;
+            }
+
+            #settingsButton {
+                background-color: #7b60fb;
+                color: white;
+                padding: 10px;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                margin-bottom: 10px;
+                /* Added margin for spacing */
+            }
+
+            .settings-field {
+                margin-bottom: 10px;
+                display: flow-root;
+            }
         </style>
+
+        <script>
+            function toggleSettings() {
+                var settingsContainer = document.getElementById('settingsContainer');
+                settingsContainer.style.display = (settingsContainer.style.display === 'none') ? 'block' : 'none';
+            }
+        </script>
     </head>
 
     <body>
@@ -104,18 +137,38 @@
                 @csrf
                 <textarea class="w-full" type="url" id="original_url" name="original_url" placeholder="Type or paste the link"
                     required></textarea>
-                <select name="space_id" id="space_id" class="custom-dropdown">
-                    @foreach ($allSpaces as $space)
-                        <option value="{{ $space->id }}">{{ $space->space_name }}</option>
-                    @endforeach
-                </select>
-                <select name="pixels_id" id="pixels_id" class="custom-dropdown">
-                    @foreach ($allPixels as $pixel)
-                        <option value="{{ $pixel->id }}">{{ $pixel->name }}</option>
-                    @endforeach
-                </select>
-                <input type="text" name="custom_alias" pattern="[a-zA-Z0-9-_]+" placeholder="Custom alias"
-                    title="Only letters, numbers, dashes, and underscores are allowed.">
+
+                <!-- Settings button -->
+                <button id="settingsButton" onclick="toggleSettings()">Settings <i class="fas fa-cog"></i></button>
+
+                <!-- Settings container -->
+                <div id="settingsContainer" style="display: none;">
+                    <select name="space_id" id="space_id" class="custom-dropdown settings-field">
+                        @foreach ($allSpaces as $space)
+                            <option value="{{ $space->id }}">{{ $space->space_name }}</option>
+                        @endforeach
+                    </select>
+                    <select name="pixels_id" id="pixels_id" class="custom-dropdown settings-field">
+                        @foreach ($allPixels as $pixel)
+                            <option value="{{ $pixel->id }}">{{ $pixel->name }}</option>
+                        @endforeach
+                    </select>
+                    <input type="text" name="custom_alias" pattern="[a-zA-Z0-9-_]+" placeholder="Custom alias"
+                        title="Only letters, numbers, dashes, and underscores are allowed." class="settings-field">
+                    <label for="click_limit" class="settings-field">Click Limit (optional):
+                        <input type="number" name="click_limit" min="1" class="settings-field"></label>
+                    <label for="expiration_date" class="settings-field">Expiration Date:
+                        <input type="date" name="expiration_date" value="{{ old('expiration_date') }}" required
+                            class="settings-field"></label>
+                    <label for="stats" class="settings-field">Stats:</label>
+                    <select id="statsDropdown" name="stats" class="settings-field">
+                        <option value="public">Public</option>
+                        <option value="private">Private</option>
+                        <option value="password">Password</option>
+                    </select>
+                </div>
+
+                <!-- Shorten button -->
                 <button type="submit" style="background-color:#7b60fb; padding:10px">Shorten</button>
             </form>
         </div>
@@ -135,7 +188,6 @@
                     <tr>
                         <td><a href="/{{ $link->short_url }}"
                                 target="_blank">https://127.0.0.1:8000/{{ $link->short_url }}</a></td>
-                        {{-- / is used if we return redirect back so it by default takes user or admin --}}
                         <td>{{ $link->click_count }}</td>
                         <td>{{ $link->created_at }}</td>
                         <td>
@@ -158,5 +210,6 @@
             </tbody>
         </table>
     </body>
+
     </html>
 </x-app-layout>

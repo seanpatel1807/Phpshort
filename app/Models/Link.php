@@ -5,16 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Vinkla\Hashids\Facades\Hashids;
+use Illuminate\Http\Request;
 
 class Link extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'original_url', 'short_url', 'expiration_date', 'spaces_id', 'pixels_id'];
+    protected $fillable = ['user_id', 'original_url', 'short_url', 'expiration_date', 'spaces_id', 'pixels_id','click_limit','expiration_date'];
 
     public static function generateShortUrl($request, $originalUrl)
     {
         $customAliasSuffix = $request['custom_alias'];
+
 
         if ($customAliasSuffix) {
             $customAliasSuffix = self::generateCustomAliasSuffix($customAliasSuffix);
@@ -23,8 +25,9 @@ class Link extends Model
             $hashids = self::generateHashids($originalUrl);
         }
 
-        $expirationDate = now()->addDays(30);
+        $expirationDate = $request['expiration_date'];
         $user = auth()->user();
+        $clickLimit=$request['click_limit'];
 
         $link = self::create([
             'original_url' => $originalUrl,
@@ -33,6 +36,8 @@ class Link extends Model
             'user_id' => $user->id,
             'spaces_id' => $request['space_id'],
             'pixels_id' => $request['pixels_id'],
+            'click_limit' =>  $clickLimit,
+
         ]);
 
         return $link->short_url;

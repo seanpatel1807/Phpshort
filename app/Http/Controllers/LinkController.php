@@ -14,38 +14,53 @@ class LinkController extends Controller
     {
         $originalUrls = explode("\n", $request->input('original_url'));
         $originalUrls = array_map('trim', $originalUrls);
-        foreach ($originalUrls as $originalUrl){
-            
-        $existingLink = Link::where('original_url',$originalUrl )->first();
 
-        if ($existingLink) {
-            $shortUrl = $existingLink->short_url;
-            $message = 'This URL already has a short link.';
-        } else {
-            $shortUrl = Link::generateShortUrl($request->all(),$originalUrl );
-            $message = null;
+        foreach ($originalUrls as $originalUrl) {
+            $existingLink = Link::where('original_url', $originalUrl)->first();
+
+            if ($existingLink) {
+                $shortUrl = $existingLink->short_url;
+                $message = 'This URL already has a short link.';
+            } else {
+                $data = $request->all();
+                $click_limit = $request->input('click_limit'); // Assuming 'click_limit' is a field in your form
+                $shortUrl = Link::generateShortUrl($data, $originalUrl);
+                $message = null;
+            }
         }
-    }
+
         $allLinks = Link::all();
         $allSpaces = Space::all();
         $allPixels = Pixel::all();
-        return view('user.link', compact('shortUrl', 'message', 'allLinks', 'allSpaces','allPixels'));
+
+        return view('user.link', compact('shortUrl', 'message', 'allLinks', 'allSpaces', 'allPixels'));
     }
-
-
 
     public function redirect($shortUrl)
     {
-        $link = Link::where('short_url', $shortUrl)->first();
+    $link = Link::where('short_url', $shortUrl)->first();
 
-        if ($link && ($link->expiration_date === null || now() < $link->expiration_date)) {
-            $link->click_count++;
-            $link->save();
+    if ($link) {
 
-            return redirect($link->original_url);
+        if ($link->expiration_date !== null && now() >= $link->expiration_date) {
+            abort(404); 
         }
-        abort(404);
+
+        $clickLimit = $link->click_limit;
+
+        if ($clickLimit !== null && $link->click_count >= $clickLimit) {
+            return view('click_limit');
+        }
+
+        $link->click_count++;
+        $link->save();
+
+        return redirect($link->original_url);
     }
+
+    abort(404); 
+}
+
 
     public function index()
     {
