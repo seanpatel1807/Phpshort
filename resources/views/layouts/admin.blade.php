@@ -93,6 +93,8 @@
                     <a class="common-link text-{{ $textColorClass }} " href="{{ route('spaces') }}">Spaces</a>
                     <a class="common-link text-{{ $textColorClass }} " href="{{ route('domains') }}">Domains</a>
                     <a class="common-link text-{{ $textColorClass }} " href="{{ route('pixels') }}">Pixels</a>
+                    <a class="common-link text-{{ $textColorClass }} " href="{{ route('users.index') }}">Users</a>
+                    <a class="common-link text-{{ $textColorClass }} " href="{{ route('pages.index') }}">Pages</a>
                     <div id="settings-category" class="mb-4">
                         <button id="settings-toggle"
                             class="flex items-center justify-between w-full px-4 py-2 mt-2 text-sm font-semibold text-gray-900 bg-transparent rounded-lg dark:bg-transparent dark:hover:bg-gray-600 dark:focus:bg-gray-600 dark:focus:text-white dark:hover:text-white text-{{ $textColorClass }} hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline">
@@ -105,8 +107,8 @@
                             </svg>
                         </button>
                         <div id="settings-links" class="hidden">
-                            <a class="common-link" href="{{ route('admin.setting') }}">General</a>
-
+                            <a class="common-link" href="{{ route('admin.general') }}">General</a>
+                            <a class="common-link" href="{{ route('admin.advanced') }}">Advanced</a>
                             <a class="common-link" href="{{ route('admin.appearance') }}">Appearance</a>
 
                             <a class="common-link" href="{{ route('admin.social') }}">Social</a>

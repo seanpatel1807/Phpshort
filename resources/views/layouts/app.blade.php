@@ -87,10 +87,10 @@
 
                     <nav class="flex-grow px-4 pb-4 md:block md:pb-0 md:overflow-y-auto">
                         <a class="common-link text-{{ $textColorClass }} " href='{{ route('dashboard') }}'>Dashboard</a>
-                        <a class="common-link text-{{ $textColorClass }} " href="{{ route('links') }}">Links</a>
-                        <a class="common-link text-{{ $textColorClass }} " href="{{ route('spaces') }}">Spaces</a>
-                        <a class="common-link text-{{ $textColorClass }} " href="{{ route('domains') }}">Domains</a>
-                        <a class="common-link text-{{ $textColorClass }} " href="{{ route('pixels') }}">Pixels</a>
+                        <a class="common-link text-{{ $textColorClass }} " href="{{ route('user.link') }}">Links</a>
+                        <a class="common-link text-{{ $textColorClass }} " href="{{ route('user.space') }}">Spaces</a>
+                        <a class="common-link text-{{ $textColorClass }} " href="{{ route('user.domain') }}">Domains</a>
+                        <a class="common-link text-{{ $textColorClass }} " href="{{ route('user.pixel') }}">Pixels</a>
                         <form method="POST" action="{{ route('logout') }}" class="mt-4">
                             @csrf
                             <button type="submit"
@@ -105,21 +105,21 @@
                 <main class="flex-grow p-10">
                     {{ $slot }}
                 </main>
-                @if ($groupedSettings['announcements']->where('name', 'user')->first())
-                    <div class="announcement"
-                        style="background-color: {{ $groupedSettings['announcements']->where('name', 'user_color')->first()->payload }}">
-                        <p class="announcement-text">
-                            {{ $groupedSettings['announcements']->where('name', 'user')->first()->payload }}
-                        </p>
-                    </div>
-
-                    <script>
-                        setTimeout(function() {
-                            document.querySelector('.announcement').style.display = 'none';
-                        }, 5000);
-                    </script>
-                @endif
-
+                @if (request()->route()->getName() == 'dashboard' && $groupedSettings['announcements']->where('name', 'user')->first())
+                <div class="announcement"
+                    style="background-color: {{ $groupedSettings['announcements']->where('name', 'user_color')->first()->payload }}">
+                    <p class="announcement-text">
+                        {{ $groupedSettings['announcements']->where('name', 'user')->first()->payload }}
+                    </p>
+                </div>
+            
+                <script>
+                    setTimeout(function() {
+                        document.querySelector('.announcement').style.display = 'none';
+                    }, 5000);
+                </script>
+            @endif
+            
             </div>
 
         </body>

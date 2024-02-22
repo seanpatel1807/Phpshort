@@ -42,15 +42,15 @@ class IndexController extends Controller
         return redirect()->route($route);
     }
 
-    public function setting()
+    public function general()
     {
         $groupedSettings = $this->getGroupedSettings();
-        return view('admin.setting', compact('groupedSettings'));
+        return view('admin.general', compact('groupedSettings'));
     }
 
-    public function updateSettings(Request $request)
+    public function updateGeneral(Request $request)
     {
-        return $this->updateSettingsGroup($request, 'admin.setting');
+        return $this->updateSettingsGroup($request, 'admin.general');
     }
     
     public function social()
@@ -85,6 +85,17 @@ class IndexController extends Controller
     {    
         return $this->updateSettingsGroup($request, 'admin.appearance');
     }
+    public function advanced()
+    {
+        $groupedSettings = $this->getGroupedSettings();//call the function which contains the main function
+        return view('admin.advanced', compact('groupedSettings'));        
+    }
+
+    public function updateadvanced(Request $request)
+    {    
+        return $this->updateSettingsGroup($request, 'admin.advanced');
+    }
+
 
     private function getGroupedSettings()//just made a function which contains all the common functionalities 
     {

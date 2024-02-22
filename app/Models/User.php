@@ -8,11 +8,13 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
+use Lab404\Impersonate\Models\Impersonate;
+use Illuminate\Database\Eloquent\Model;
 //ama hasrole vadu mukvanu 
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable,HasRoles;
+    use HasApiTokens, HasFactory, Notifiable,HasRoles,Impersonate;
 
     /**
      * The attributes that are mass assignable.
@@ -44,4 +46,17 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+    public function links()
+    {
+        return $this->hasMany(Link::class);
+    }
+    public function spaces()
+    {
+        return $this->hasMany(Space::class);
+    }
+    public function pixles()
+    {
+        return $this->hasMany(Pixel::class);
+    }
 }
+ 
