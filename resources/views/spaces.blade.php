@@ -23,6 +23,11 @@
     <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px;">
         <h2>Spaces Information</h2>
     </div>
+    <form action="{{ route('spaces') }}" method="get">
+        <input type="text" name="query" placeholder="Search spaces" value="{{ $query }}">
+        <button type="submit"
+            style="padding: 10px; background-color: #7b60fb; color: #fff; border: none; cursor: pointer;">Search</button>
+    </form>
     <table class="links-table">
         <thead>
             <tr>

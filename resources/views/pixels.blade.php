@@ -23,6 +23,11 @@
     <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px;">
         <h2>Pixels Information</h2>
     </div>
+    <form action="{{ route('pixels') }}" method="get">
+        <input type="text" name="query" placeholder="Search pixels" value="{{ $query }}">
+        <button type="submit"
+            style="padding: 10px; background-color: #7b60fb; color: #fff; border: none; cursor: pointer;">Search</button>
+    </form>
     <table class="links-table">
         <thead>
             <tr>
@@ -48,7 +53,8 @@
                     <td> <a href="{{ route('pixels.edit', $users->id) }}" style="text-decoration: none;">
                             <button
                                 style="background-color: #3490dc; color: white; padding: 3px; margin-left: 5px;">Edit</button>
-                        </a></td>
+                        </a>
+                    </td>
                 </tr>
             @endforeach
         </tbody>

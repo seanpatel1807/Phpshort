@@ -28,6 +28,11 @@
             </button>
         </a>
     </div>
+    <form action="{{ route('user.space') }}" method="get">
+        <input type="text" name="query" placeholder="Search spaces" value="{{ $query }}">
+        <button type="submit"
+            style="padding: 10px; background-color: #7b60fb; color: #fff; border: none; cursor: pointer;">Search</button>
+    </form>
     <table class="links-table">
         <thead>
             <tr>

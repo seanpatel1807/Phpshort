@@ -34,9 +34,14 @@
         }
     </style>
 
-    <a href="{{ route('pixel.create') }}" style="background-color:#7b60fb;padding:10px; ">
+    <a href="{{ route('pixel.create') }}" style="background-color:#7b60fb;padding:10px">
         <button>Create Pixel</button>
     </a>
+    <form action="{{ route('user.pixel') }}" method="get">
+        <input type="text" name="query" placeholder="Search pixels" value="{{ $query }}"
+            style="margin-top: 30px">
+        <button type="submit" style="background-color:#7b60fb;padding:10px ">Search</button>
+    </form>
     <br>
     <div class="container">
         <div class="center-container">
