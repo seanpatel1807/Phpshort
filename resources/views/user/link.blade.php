@@ -68,7 +68,6 @@
                 cursor: pointer;
             }
 
-            /* Styling for the settings button and container */
             #settingsContainer {
                 display: none;
                 margin-top: 10px;
@@ -82,7 +81,6 @@
                 border-radius: 5px;
                 cursor: pointer;
                 margin-bottom: 10px;
-                /* Added margin for spacing */
             }
 
             .settings-field {
@@ -158,14 +156,38 @@
                     <label for="click_limit" class="settings-field">Click Limit (optional):
                         <input type="number" name="click_limit" min="1" class="settings-field"></label>
                     <label for="expiration_date" class="settings-field">Expiration Date:
-                        <input type="date" name="expiration_date" value="{{ old('expiration_date') }}" required
-                            class="settings-field"></label>
-                    <label for="stats" class="settings-field">Stats:</label>
-                    <select id="statsDropdown" name="stats" class="settings-field">
+                        <input type="date" name="expiration_date" value="{{ old('expiration_date') }}"
+                            class="settings-field" min="{{ date('Y-m-d') }}">
+                    </label>
+
+                    <label for="password">Password:</label>
+                    @if (old('access_type') === 'password')
+                        <input type="password" name="password" id="password" required>
+                    @else
+                        <input type="password" name="password" id="password" style="display: none">
+                    @endif
+
+                    <label for="access_type">Access Type:</label>
+                    <select name="access_type" id="access_type">
                         <option value="public">Public</option>
                         <option value="private">Private</option>
-                        <option value="password">Password</option>
+                        <option value="password">Password-Protected</option>
                     </select>
+
+                    <script>
+                        document.getElementById('access_type').addEventListener('change', function() {
+                            var selectedValue = this.value;
+                            var passwordInput = document.getElementById('password');
+
+                            if (selectedValue === 'password') {
+                                passwordInput.style.display = 'block';
+                                passwordInput.setAttribute('required', 'required');
+                            } else {
+                                passwordInput.style.display = 'none';
+                                passwordInput.removeAttribute('required');
+                            }
+                        });
+                    </script>
                 </div>
 
                 <!-- Shorten button -->
@@ -180,14 +202,15 @@
                     <th>Short URL</th>
                     <th>Click count</th>
                     <th>Created At</th>
-                    <th>function</th>
+                    <th>Function</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach ($allLinks as $link)
+                @foreach ($allLinks->reverse() as $link)
                     <tr>
                         <td><a href="/{{ $link->short_url }}"
-                                target="_blank">https://127.0.0.1:8000/{{ $link->short_url }}</a></td>
+                                target="_blank">https://127.0.0.1:8000/{{ $link->short_url }}</a>
+                        </td>
                         <td>{{ $link->click_count }}</td>
                         <td>{{ $link->created_at }}</td>
                         <td>
@@ -198,11 +221,10 @@
                                     onclick="return confirm('Are you sure you want to delete this link?')"
                                     class="delete-button">Delete</button>
                             </form>
-                        </td>
-                        <td>
                             <form action="{{ route('link.edit', ['id' => $link->id]) }}" method="get">
                                 @csrf
-                                <button type="submit">Edit</button>
+                                <button type="submit"
+                                    style="background-color:blanchedalmond;padding:10px">Edit</button>
                             </form>
                         </td>
                     </tr>

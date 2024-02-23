@@ -11,7 +11,7 @@ class Link extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'original_url', 'short_url', 'expiration_date', 'spaces_id', 'pixels_id','click_limit','expiration_date'];
+    protected $fillable = ['user_id', 'original_url', 'short_url', 'expiration_date', 'spaces_id', 'pixels_id', 'click_limit', 'expiration_date', 'password', 'access_type','is_disabled'];
 
     public static function generateShortUrl($request, $originalUrl)
     {
@@ -26,6 +26,10 @@ class Link extends Model
         }
 
         $expirationDate = $request['expiration_date'];
+
+    if (empty($expirationDate)) {
+    $expirationDate = now()->addDay()->toDateString();
+    }
         $user = auth()->user();
         $clickLimit=$request['click_limit'];
 
@@ -37,6 +41,8 @@ class Link extends Model
             'spaces_id' => $request['space_id'],
             'pixels_id' => $request['pixels_id'],
             'click_limit' =>  $clickLimit,
+            'password' => $request['password'],
+            'access_type' => $request['access_type'],
 
         ]);
 

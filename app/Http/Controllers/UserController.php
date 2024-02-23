@@ -75,4 +75,16 @@ class UserController extends Controller
 
         return redirect()->route('users.index')->with('success', 'User deleted successfully.');
     }
+    public function disable(User $user)
+    {
+        $user->is_disabled=1;
+        $user->save();
+        return redirect()->route('users.index')->with('success', 'User disabled successfully.');
+    }
+    public function enable(User $user)
+    {
+        $user->is_disabled=0;
+        $user->save();
+        return redirect()->route('users.index')->with('success', 'User enabled successfully.');
+    }
 }

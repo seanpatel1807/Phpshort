@@ -19,17 +19,38 @@
         .btn-custom {
             background-color: #7b60fb;
             color: #fff;
-            padding: 10px
+            padding: 10px;
+            cursor: pointer;
         }
 
         .form-group {
             margin-bottom: 20px;
         }
 
-        .custom-dropdown {
+        .custom-dropdown,
+        .settings-field {
             width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-top: 5px;
+        }
+
+        .custom-dropdown {
+            height: 40px;
+        }
+
+        .settings-field {
+            height: 36px;
+        }
+
+        label {
+            margin-bottom: 5px;
+            display: block;
+            font-weight: bold;
         }
     </style>
+
     <div class="container">
         <div class="center-container">
             <h2>Edit Link</h2>
@@ -50,7 +71,7 @@
 
                 <div class="form-group">
                     <label for="original_url">Original URL:</label>
-                    <input type="text" class="form-control" name="original_url" value="{{ $link->original_url }}"
+                    <input type="text" class="settings-field" name="original_url" value="{{ $link->original_url }}"
                         required>
                 </div>
 
@@ -67,16 +88,67 @@
 
                 <div class="form-group">
                     <label for="short_url">Custom Alias (Optional):</label>
-                    <input type="text" class="form-control" name="short_url" pattern="[a-zA-Z0-9-_]+"
+                    <input type="text" class="settings-field" name="short_url" pattern="[a-zA-Z0-9-_]+"
+                        value="{{ $link->short_url }}"
                         placeholder="Only letters, numbers, dashes, and underscores are allowed." title="Custom Alias">
                 </div>
-                <select name="pixels_id" id="pixels_id" class="custom-dropdown">
-                    @foreach ($allPixels as $pixel)
-                        <option value="{{ $pixel->id }}"{{ $link->space_id == $pixel->id ? 'selected' : '' }}>
-                            {{ $pixel->name }}</option>
-                    @endforeach
-                </select>
-                <button type="submit" class="btn btn-custom">Update Link</button>
+
+                <div class="form-group">
+                    <label for="click_limit">Click Limit (optional):</label>
+                    <input type="number" name="click_limit" min="1" class="settings-field"
+                        value="{{ $link->click_limit }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="expiration_date">Expiration Date:</label>
+                    <input type="date" name="expiration_date" value="{{ old('expiration_date') }}"
+                        class="settings-field" min="{{ date('Y-m-d') }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    @if (old('access_type') === 'password')
+                        <input type="password" name="password" id="password" class="settings-field" required>
+                    @else
+                        <input type="password" name="password" id="password" class="settings-field"
+                            style="display: none">
+                    @endif
+                </div>
+
+                <div class="form-group">
+                    <label for="access_type">Access Type:</label>
+                    <select name="access_type" id="access_type" class="custom-dropdown">
+                        <option value="public">Public</option>
+                        <option value="private">Private</option>
+                        <option value="password">Password-Protected</option>
+                    </select>
+                </div>
+                <script>
+                    document.getElementById('access_type').addEventListener('change', function() {
+                        var selectedValue = this.value;
+
+                        var passwordInput = document.getElementById('password');
+
+                        if (selectedValue === 'password') {
+                            passwordInput.style.display = 'block';
+                            passwordInput.setAttribute('required', 'required');
+                        } else {
+                            passwordInput.style.display = 'none';
+                            passwordInput.removeAttribute('required');
+                        }
+                    });
+                </script>
+                <div class="form-group">
+                    <label for="pixels_id">Select Pixel:</label>
+                    <select name="pixels_id" id="pixels_id" class="custom-dropdown">
+                        @foreach ($allPixels as $pixel)
+                            <option value="{{ $pixel->id }}"{{ $link->pixels_id == $pixel->id ? 'selected' : '' }}>
+                                {{ $pixel->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <button type="submit" class="btn-custom">Update Link</button>
             </form>
         </div>
     </div>
