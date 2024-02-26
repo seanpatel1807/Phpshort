@@ -131,6 +131,13 @@
                     }, 5000);
                 </script>
             @endif
+
+            @if (isset($linkExists))
+                <div class="message-box" style="background-color: #f44336;">
+                    <p>{{ $linkExists }}</p>
+                </div>
+            @endif
+
             <form method="POST" action="/create-link" class="flex" style="gap:10px">
                 @csrf
                 <textarea class="w-full" type="url" id="original_url" name="original_url" placeholder="Type or paste the link"
@@ -162,11 +169,10 @@
 
                     <label for="password">Password:</label>
                     @if (old('access_type') === 'password')
-                        <input type="password" name="password" id="password" required>
+                        <input type="password" name="password" id="password">
                     @else
                         <input type="password" name="password" id="password" style="display: none">
                     @endif
-
                     <label for="access_type">Access Type:</label>
                     <select name="access_type" id="access_type">
                         <option value="public">Public</option>
@@ -195,6 +201,20 @@
             </form>
         </div>
         <h2>All Links:</h2>
+        @if (session('success'))
+            <div id="message-box" class="message-box">
+                <p>{{ session('success') }}</p>
+            </div>
+            <script>
+                document.getElementById('message-box').classList.remove('hide');
+                setTimeout(function() {
+                    document.getElementById('message-box').style.opacity = '0';
+                    setTimeout(function() {
+                        document.getElementById('message-box').style.display = 'none';
+                    }, 500);
+                }, 5000);
+            </script>
+        @endif
 
         <table class="links-table">
             <thead>

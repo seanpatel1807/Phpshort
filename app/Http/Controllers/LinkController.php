@@ -102,7 +102,7 @@ class LinkController extends Controller
 
         $allLinks = Link::all();
 
-        return  redirect()->back();
+        return  redirect()->back()->with('success','Deleted successfully');
     }
 
     public function edit($id)
@@ -112,10 +112,9 @@ class LinkController extends Controller
         if (!$link) {
             return redirect()->back()->withErrors(['Link not found.']);
         }
-
         $allSpaces = Space::all();
         $allPixels = Pixel::all();
-        return view('edit_link', compact('link', 'allSpaces','allPixels'));
+        return view('edit_link', compact('link', 'allSpaces','allPixels'))->with('success','Updated');
     }
 
     public function update(Request $request, $id)
@@ -125,6 +124,11 @@ class LinkController extends Controller
         if (!$link) {
             return redirect()->back()->withErrors(['Link not found.']);
         }
+        $request->validate([
+            'original_url' => 'required|url',
+            'password' => 'required',
+        ]);
+        
         
         $link->original_url = $request->input('original_url', $link->original_url);
         $link->spaces_id = $request->input('space_id', $link->spaces_id);
@@ -138,7 +142,7 @@ class LinkController extends Controller
 
         $link->save();
 
-        return redirect()->back()->with('success', 'Link updated successfully.');
+        return redirect(route('user.link'))->with('success', 'Link updated successfully.');
     }
     public function checkPassword($shortUrl, Request $request)
 {

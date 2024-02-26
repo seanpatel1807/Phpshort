@@ -95,7 +95,7 @@
 
                 <div class="form-group">
                     <label for="click_limit">Click Limit (optional):</label>
-                    <input type="number" name="click_limit" min="1" class="settings-field"
+                    <input type="number" name="click_limit" min="0"class="settings-field"
                         value="{{ $link->click_limit }}">
                 </div>
 
@@ -108,7 +108,7 @@
                 <div class="form-group">
                     <label for="password">Password:</label>
                     @if (old('access_type') === 'password')
-                        <input type="password" name="password" id="password" class="settings-field" required>
+                        <input type="password" name="password" id="password" class="settings-field">
                     @else
                         <input type="password" name="password" id="password" class="settings-field"
                             style="display: none">
@@ -117,12 +117,16 @@
 
                 <div class="form-group">
                     <label for="access_type">Access Type:</label>
-                    <select name="access_type" id="access_type" class="custom-dropdown">
-                        <option value="public">Public</option>
-                        <option value="private">Private</option>
-                        <option value="password">Password-Protected</option>
+                    <select name="access_type" id="access_type"
+                        class="custom-dropdown"value="{{ $link->access_type }}">
+                        <option value="public" {{ $link->access_type === 'public' ? 'selected' : '' }}>Public</option>
+                        <option value="private" {{ $link->access_type === 'private' ? 'selected' : '' }}>Private
+                        </option>
+                        <option value="password" {{ $link->access_type === 'password' ? 'selected' : '' }}>
+                            Password</option>
                     </select>
                 </div>
+
                 <script>
                     document.getElementById('access_type').addEventListener('change', function() {
                         var selectedValue = this.value;
