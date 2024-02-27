@@ -167,10 +167,10 @@
                             class="settings-field" min="{{ date('Y-m-d') }}">
                     </label>
 
-                    <label for="password">Password:</label>
                     @if (old('access_type') === 'password')
                         <input type="password" name="password" id="password">
                     @else
+                        <label for="password">Password:</label>
                         <input type="password" name="password" id="password" style="display: none">
                     @endif
                     <label for="access_type">Access Type:</label>

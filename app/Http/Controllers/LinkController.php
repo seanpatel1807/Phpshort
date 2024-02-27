@@ -41,7 +41,7 @@ class LinkController extends Controller
 
     public function redirect($shortUrl, Request $request)
 {
-    $link = Link::where('short_url', $shortUrl)->first();
+    $link = Link::where('short_url', $shortUrl)->lockForUpdate()->first();
 
     if ($link) {
         if ($link->expiration_date !== null && now() >= $link->expiration_date) {
@@ -62,14 +62,20 @@ class LinkController extends Controller
             
                 case 'private':
                     if (auth()->check()) {
+                        // Check if the authenticated user is the owner of the link
+                        if ($link->user_id !== auth()->user()->id) {
+                            abort(403, 'Unauthorized access to private link');
+                        }
+                
                         $link->click_count++;
                         $link->save();
                         return redirect($link->original_url);
                     } else {
+                        // User not authenticated
                         abort(404);
                     }
-                    break;
-
+                    break;                
+                    
 
             default:
                 // Public link, update click count and redirect
@@ -126,7 +132,6 @@ class LinkController extends Controller
         }
         $request->validate([
             'original_url' => 'required|url',
-            'password' => 'required',
         ]);
         
         

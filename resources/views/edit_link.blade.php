@@ -99,38 +99,28 @@
                         value="{{ $link->click_limit }}">
                 </div>
 
-                <div class="form-group">
-                    <label for="expiration_date">Expiration Date:</label>
-                    <input type="date" name="expiration_date" value="{{ old('expiration_date') }}"
-                        class="settings-field" min="{{ date('Y-m-d') }}">
-                </div>
+                <div class="form-group"> <label for="expiration_date">Expiration Date:</label> <input type="date"
+                        name="expiration_date"
+                        value="{{ $link->expiration_date ? \Carbon\Carbon::parse($link->expiration_date)->format('Y-m-d') : '' }}"
+                        class="settings-field" min="{{ date('Y-m-d') }}"> </div>
 
-                <div class="form-group">
+                @if ($link->access_type === 'password')
+                    <input type="password" name="password" id="password">
+                @else
                     <label for="password">Password:</label>
-                    @if (old('access_type') === 'password')
-                        <input type="password" name="password" id="password" class="settings-field">
-                    @else
-                        <input type="password" name="password" id="password" class="settings-field"
-                            style="display: none">
-                    @endif
-                </div>
 
-                <div class="form-group">
-                    <label for="access_type">Access Type:</label>
-                    <select name="access_type" id="access_type"
-                        class="custom-dropdown"value="{{ $link->access_type }}">
-                        <option value="public" {{ $link->access_type === 'public' ? 'selected' : '' }}>Public</option>
-                        <option value="private" {{ $link->access_type === 'private' ? 'selected' : '' }}>Private
-                        </option>
-                        <option value="password" {{ $link->access_type === 'password' ? 'selected' : '' }}>
-                            Password</option>
-                    </select>
-                </div>
+                    <input type="password" name="password" id="password" style="display: none">
+                @endif
+                <label for="access_type">Access Type:</label>
+                <select name="access_type" id="access_type">
+                    <option value="public">Public</option>
+                    <option value="private">Private</option>
+                    <option value="password">Password-Protected</option>
+                </select>
 
-                <script>
+                {{-- <script>
                     document.getElementById('access_type').addEventListener('change', function() {
                         var selectedValue = this.value;
-
                         var passwordInput = document.getElementById('password');
 
                         if (selectedValue === 'password') {
@@ -141,7 +131,7 @@
                             passwordInput.removeAttribute('required');
                         }
                     });
-                </script>
+                </script> --}}
                 <div class="form-group">
                     <label for="pixels_id">Select Pixel:</label>
                     <select name="pixels_id" id="pixels_id" class="custom-dropdown">
