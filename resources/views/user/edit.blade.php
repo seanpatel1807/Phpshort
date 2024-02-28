@@ -18,6 +18,11 @@
                     class="p-3 border border-gray-300 rounded w-full">
             </div>
 
+            <div class="mb-4">
+                <label for="password" class="block text-gray-700 text-sm mb-2">Password</label>
+                <input type="password" name="password" id="password" class="p-3 border border-gray-300 rounded w-full">
+            </div>
+
             <button type="submit"
                 class="bg-black text-white px-4 py-2 rounded hover:bg-blue-600 focus:outline-none focus:shadow-outline-blue active:bg-blue-800">
                 Update User

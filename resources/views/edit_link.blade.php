@@ -105,33 +105,41 @@
                         class="settings-field" min="{{ date('Y-m-d') }}"> </div>
 
                 @if ($link->access_type === 'password')
-                    <input type="password" name="password" id="password">
+                    <div id="password">
+                        <label for="password">Password:</label>
+                        <input type="password" name="password">
+                    </div>
                 @else
-                    <label for="password">Password:</label>
-
                     <input type="password" name="password" id="password" style="display: none">
                 @endif
+
                 <label for="access_type">Access Type:</label>
                 <select name="access_type" id="access_type">
-                    <option value="public">Public</option>
-                    <option value="private">Private</option>
-                    <option value="password">Password-Protected</option>
+                    <option value="public" {{ $link->access_type === 'public' ? 'selected' : '' }}>Public</option>
+                    <option value="private" {{ $link->access_type === 'private' ? 'selected' : '' }}>Private</option>
+                    <option value="password" {{ $link->access_type === 'password' ? 'selected' : '' }}>
+                        Password-Protected</option>
                 </select>
 
-                {{-- <script>
-                    document.getElementById('access_type').addEventListener('change', function() {
-                        var selectedValue = this.value;
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        var accessTypeDropdown = document.getElementById('access_type');
                         var passwordInput = document.getElementById('password');
 
-                        if (selectedValue === 'password') {
-                            passwordInput.style.display = 'block';
-                            passwordInput.setAttribute('required', 'required');
-                        } else {
-                            passwordInput.style.display = 'none';
-                            passwordInput.removeAttribute('required');
-                        }
+                        accessTypeDropdown.addEventListener('change', function() {
+                            var selectedValue = this.value;
+
+                            if (selectedValue === 'password') {
+                                passwordInput.style.display = 'block';
+                                passwordInput.setAttribute('required', 'required');
+                            } else {
+                                passwordInput.style.display = 'none';
+                                passwordInput.removeAttribute('required');
+                            }
+                        });
                     });
-                </script> --}}
+                </script>
+
                 <div class="form-group">
                     <label for="pixels_id">Select Pixel:</label>
                     <select name="pixels_id" id="pixels_id" class="custom-dropdown">

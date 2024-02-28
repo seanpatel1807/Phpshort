@@ -98,106 +98,105 @@
     </head>
 
     <body>
+
+        @if (isset($message))
+            <div id="message-box" class="message-box hide">
+                <p>{{ $message }}</p>
+            </div>
+            <script>
+                document.getElementById('message-box').classList.remove('hide');
+                setTimeout(function() {
+                    document.getElementById('message-box').style.opacity = '0';
+                    setTimeout(function() {
+                        document.getElementById('message-box').style.display = 'none';
+                    }, 500);
+                }, 5000);
+            </script>
+        @endif
+
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+        <button id="settingsButton" onclick="toggleSettings()">Settings <i class="fas fa-cog"></i></button>
         <div>
-            @if (isset($message))
-                <div id="message-box" class="message-box hide">
-                    <p>{{ $message }}</p>
-                </div>
-                <script>
-                    document.getElementById('message-box').classList.remove('hide');
-                    setTimeout(function() {
-                        document.getElementById('message-box').style.opacity = '0';
-                        setTimeout(function() {
-                            document.getElementById('message-box').style.display = 'none';
-                        }, 500);
-                    }, 5000);
-                </script>
-            @endif
-
-            @if (isset($shortUrl))
-                <div id="short-link" class="short-link show">
-                    <p>
-                        Short Link:
-                        <a href="{{ $shortUrl }}" target="blank">{{ $shortUrl }}</a>
-                    </p>
-                </div>
-
-                <script>
-                    setTimeout(function() {
-                        document.getElementById('short-link').style.opacity = '0';
-                        setTimeout(function() {
-                            document.getElementById('short-link').style.display = 'none';
-                        }, 500);
-                    }, 5000);
-                </script>
-            @endif
-
-            @if (isset($linkExists))
-                <div class="message-box" style="background-color: #f44336;">
-                    <p>{{ $linkExists }}</p>
-                </div>
-            @endif
-
             <form method="POST" action="/create-link" class="flex" style="gap:10px">
                 @csrf
-                <textarea class="w-full" type="url" id="original_url" name="original_url" placeholder="Type or paste the link"
-                    required></textarea>
+                <textarea class="w-full" type="url" id="original_url" name="original_url" placeholder="Type or paste the link"></textarea>
+        </div>
+        <!-- Settings button -->
+        <div>
 
-                <!-- Settings button -->
-                <button id="settingsButton" onclick="toggleSettings()">Settings <i class="fas fa-cog"></i></button>
-
-                <!-- Settings container -->
-                <div id="settingsContainer" style="display: none;">
+            <!-- Settings container -->
+            <div id="settingsContainer" style="display: none;">
+                <label>space name
                     <select name="space_id" id="space_id" class="custom-dropdown settings-field">
                         @foreach ($allSpaces as $space)
                             <option value="{{ $space->id }}">{{ $space->space_name }}</option>
                         @endforeach
                     </select>
+                </label>
+                <label>pixels
                     <select name="pixels_id" id="pixels_id" class="custom-dropdown settings-field">
                         @foreach ($allPixels as $pixel)
                             <option value="{{ $pixel->id }}">{{ $pixel->name }}</option>
                         @endforeach
                     </select>
+                </label>
+                <label>custom alias
                     <input type="text" name="custom_alias" pattern="[a-zA-Z0-9-_]+" placeholder="Custom alias"
                         title="Only letters, numbers, dashes, and underscores are allowed." class="settings-field">
-                    <label for="click_limit" class="settings-field">Click Limit (optional):
-                        <input type="number" name="click_limit" min="1" class="settings-field"></label>
-                    <label for="expiration_date" class="settings-field">Expiration Date:
-                        <input type="date" name="expiration_date" value="{{ old('expiration_date') }}"
-                            class="settings-field" min="{{ date('Y-m-d') }}">
-                    </label>
+                </label>
+                <label for="click_limit" class="settings-field">Click Limit (optional):
+                    <input type="number" name="click_limit" min="1" class="settings-field"></label>
+                <label for="expiration_date" class="settings-field">Expiration Date:
+                    <input type="date" name="expiration_date" value="{{ old('expiration_date') }}"
+                        class="settings-field" min="{{ date('Y-m-d') }}">
+                </label>
 
-                    @if (old('access_type') === 'password')
-                        <input type="password" name="password" id="password">
-                    @else
-                        <label for="password">Password:</label>
-                        <input type="password" name="password" id="password" style="display: none">
-                    @endif
+
+                <div>
                     <label for="access_type">Access Type:</label>
                     <select name="access_type" id="access_type">
                         <option value="public">Public</option>
                         <option value="private">Private</option>
-                        <option value="password">Password-Protected</option>
+                        <option value="password">Password Protected</option>
                     </select>
-
-                    <script>
-                        document.getElementById('access_type').addEventListener('change', function() {
-                            var selectedValue = this.value;
-                            var passwordInput = document.getElementById('password');
-
-                            if (selectedValue === 'password') {
-                                passwordInput.style.display = 'block';
-                                passwordInput.setAttribute('required', 'required');
-                            } else {
-                                passwordInput.style.display = 'none';
-                                passwordInput.removeAttribute('required');
-                            }
-                        });
-                    </script>
                 </div>
 
-                <!-- Shorten button -->
-                <button type="submit" style="background-color:#7b60fb; padding:10px">Shorten</button>
+                <div id="passwordField">
+                    <label for="password">Password:</label>
+                    <input type="password" name="password" id="password">
+                </div>
+
+                <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+                <script>
+                    $(document).ready(function() {
+                        // Initially hide the password field
+                        $('#passwordField').hide();
+
+                        // Show/hide password field based on access_type
+                        $('#access_type').change(function() {
+                            if ($(this).val() === 'password') {
+                                $('#passwordField').show();
+                            } else {
+                                $('#passwordField').hide();
+                            }
+                        });
+
+                        // Trigger change event on page load if needed
+                        $('#access_type').trigger('change');
+                    });
+                </script>
+
+            </div>
+            <!-- Shorten button -->
+            <button type="submit" style="background-color:#7b60fb; padding:10px">Shorten</button>
             </form>
         </div>
         <h2>All Links:</h2>

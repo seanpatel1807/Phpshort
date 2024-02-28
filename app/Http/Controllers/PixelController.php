@@ -22,42 +22,68 @@ class PixelController extends Controller
         ]);
         $user = auth()->user();
 
+        // Check if the authenticated user is disabled
+        if ($user && $user->is_disabled) {
+            abort(403, 'User is disabled.');
+        }
+
         Pixel::create([
             'name' => $request->input('name'),
             'type' => $request->input('type'),
             'users_id' => $user->id,
         ]);
-        
 
         return redirect()->route('user.pixel')->with('success', 'Pixel data added successfully!');
     }
+
     public function index(Request $request)
-{
-    $query = $request->input('query');
+    {
+        $query = $request->input('query');
 
-    $pixels = DB::table('pixels')
-        ->select(
-            'pixels.*',
-            DB::raw('(SELECT COUNT(*) FROM links WHERE links.pixels_id = pixels.id) as links_count')
-        )
-        ->when($query, function ($query) use ($request) {
-            $query->where('pixels.name', 'like', '%' . $request->input('query') . '%');
-        })
-        ->get();
+        // Check if the authenticated user is disabled
+        $user = auth()->user();
+        if ($user && $user->is_disabled) {
+            abort(403, 'User is disabled.');
+        }
 
-    return view('user.pixel', compact('pixels', 'query'));
-}
+        $pixels = DB::table('pixels')
+            ->select(
+                'pixels.*',
+                DB::raw('(SELECT COUNT(*) FROM links WHERE links.pixels_id = pixels.id) as links_count')
+            )
+            ->when($query, function ($query) use ($request) {
+                $query->where('pixels.name', 'like', '%' . $request->input('query') . '%');
+            })
+            ->get();
+
+        return view('user.pixel', compact('pixels', 'query'));
+    }
 
     public function destroy($id)
     {
         $pixel = Pixel::find($id);
+
+        // Check if the authenticated user is disabled
+        $user = auth()->user();
+        if ($user && $user->is_disabled) {
+            abort(403, 'User is disabled.');
+        }
+
         $pixel->delete();
 
         return redirect()->route('user.pixel')->with('success', 'Pixel deleted successfully!');
     }
+
     public function edit($id)
     {
         $pixel = Pixel::find($id);
+
+        // Check if the authenticated user is disabled
+        $user = auth()->user();
+        if ($user && $user->is_disabled) {
+            abort(403, 'User is disabled.');
+        }
+
         return view('pixels.edit', compact('pixel'));
     }
 
@@ -69,32 +95,46 @@ class PixelController extends Controller
         ]);
 
         $pixel = Pixel::find($id);
+
+        // Check if the authenticated user is disabled
+        $user = auth()->user();
+        if ($user && $user->is_disabled) {
+            abort(403, 'User is disabled.');
+        }
+
         $pixel->update([
             'name' => $request->input('name'),
             'type' => $request->input('type'),
         ]);
 
         return redirect()->route('user.pixel')->with('success', 'Pixel updated successfully!');
-    }    
+    }
+
     public function data(Request $request)
-{
-    $query = $request->input('query');
+    {
+        $query = $request->input('query');
 
-    $user = DB::table('pixels')
-        ->join('users', 'users.id', '=', 'pixels.users_id')
-        ->select(
-            'pixels.*',
-            'users.name as user_name',
-            'users.email as user_email',
-            DB::raw('(SELECT COUNT(*) FROM links WHERE links.pixels_id = pixels.id) as links_count')
-        )
-        ->when($query, function ($query) use ($request) {
-            $query->where('users.name', 'like', '%' . $request->input('query') . '%')
-                  ->orWhere('pixels.name', 'like', '%' . $request->input('query') . '%')
-                  ->orWhere(DB::raw('(SELECT COUNT(*) FROM links WHERE links.pixels_id = pixels.id)'), 'like', '%' . $request->input('query') . '%');
-        })
-        ->get();
+        // Check if the authenticated user is disabled
+        $user = auth()->user();
+        if ($user && $user->is_disabled) {
+            abort(403, 'User is disabled.');
+        }
 
-    return view('pixels', compact('user', 'query'));
-}
+        $user = DB::table('pixels')
+            ->join('users', 'users.id', '=', 'pixels.users_id')
+            ->select(
+                'pixels.*',
+                'users.name as user_name',
+                'users.email as user_email',
+                DB::raw('(SELECT COUNT(*) FROM links WHERE links.pixels_id = pixels.id) as links_count')
+            )
+            ->when($query, function ($query) use ($request) {
+                $query->where('users.name', 'like', '%' . $request->input('query') . '%')
+                    ->orWhere('pixels.name', 'like', '%' . $request->input('query') . '%')
+                    ->orWhere(DB::raw('(SELECT COUNT(*) FROM links WHERE links.pixels_id = pixels.id)'), 'like', '%' . $request->input('query') . '%');
+            })
+            ->get();
+
+        return view('pixels', compact('user', 'query'));
+    }
 }
