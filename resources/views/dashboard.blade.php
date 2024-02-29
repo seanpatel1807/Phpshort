@@ -17,39 +17,52 @@
             }
 
             .navigation {
-
-                padding: 10px;
-                text-align: center;
                 display: flex;
-                justify-content: space-around;
+                flex-wrap: wrap;
+                justify-content: center;
+                align-items: center;
+                padding: 20px;
             }
 
             .nav-link-container {
-                background-color: #555;
+                width: 150px;
+                height: 150px;
+                background-color: #f4f1f1;
                 border-radius: 8px;
                 overflow: hidden;
-                margin: 0 10px;
-            }
-
-            .nav-link {
-                display: block;
-                padding: 10px;
-                text-decoration: none;
-                color: #fff;
+                margin: 0 10px 20px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
                 transition: background-color 0.3s ease;
             }
 
-            .nav-link:hover {
+            .nav-link {
+                text-decoration: none;
+                color: #000000;
+                font-size: 1.5rem;
+                text-align: center;
+            }
+
+            .nav-link-container:hover {
                 background-color: #777;
+            }
+
+            @media screen and (max-width: 768px) {
+                .nav-link-container {
+                    width: 100%;
+                    margin: 0 0 20px;
+                }
             }
         </style>
     </head>
 
     <body>
 
-        <p style="font-size: 3rem;color:darkgray">
-            Phpshort</p>
-        <p style="font-size: 2rem">overview</p>
+        <div class="header">
+            <p style="font-size: 3rem;color:darkgray">Phpshort</p>
+            <p style="font-size: 2rem">Overview</p>
+        </div>
 
         <div class="navigation">
             <div class="nav-link-container">

@@ -16,7 +16,7 @@ Route::view('/', 'welcome');
 Route::impersonate();
 
 // User Routes
-Route::prefix('/user')->middleware(['auth', 'verified'])->group(function () {
+Route::prefix('/user')->middleware(['auth', 'verified','nocache'])->group(function () {
     Route::get('/links', [LinkController::class, 'index'])->name('user.link');
     Route::get('/links/{id}/edit', [LinkController::class, 'edit'])->name('link.edit');
     Route::patch('/links/{id}', [LinkController::class, 'update'])->name('link.update');
@@ -45,7 +45,7 @@ Route::prefix('/user')->middleware(['auth', 'verified'])->group(function () {
 });
 
 // Authenticated User Routes
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'verified', 'nocache'])->group(function () {
     Route::view('/dashboard', 'dashboard')->name('dashboard');
 
     // Admin Routes

@@ -26,10 +26,7 @@ class Link extends Model
         }
 
         $expirationDate = $request['expiration_date'];
-
-    if (empty($expirationDate)) {
-    $expirationDate = now()->addDay()->toDateString();
-    }
+        
         $user = auth()->user();
         $clickLimit=$request['click_limit'];
 

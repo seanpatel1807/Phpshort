@@ -99,14 +99,18 @@
                         value="{{ $link->click_limit }}">
                 </div>
 
-                <div class="form-group"> <label for="expiration_date">Expiration Date:</label> <input type="date"
-                        name="expiration_date"
-                        value="{{ $link->expiration_date ? \Carbon\Carbon::parse($link->expiration_date)->format('Y-m-d') : '' }}"
-                        class="settings-field" min="{{ date('Y-m-d') }}"> </div>
+                <div class="form-group">
+                    <label for="expiration_date">Expiration Date and Time:</label>
+                    <input type="datetime-local" name="expiration_date"
+                        value="{{ $link->expiration_date ? \Carbon\Carbon::parse($link->expiration_date)->format('Y-m-d\TH:i') : '' }}"
+                        class="settings-field" min="{{ date('Y-m-d\TH:i') }}">
+                </div>
+
 
                 @if ($link->access_type === 'password')
                     <div id="password">
-                        <label for="password">Password:</label>
+                        <p>Current password: {{ decrypt($link->password) }}</p>
+                        <label for="password">New Password:</label>
                         <input type="password" name="password">
                     </div>
                 @else

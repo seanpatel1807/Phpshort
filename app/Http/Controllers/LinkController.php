@@ -41,7 +41,7 @@ class LinkController extends Controller
                 $data = $request->all();
                 $click_limit = $request->input('click_limit');
                 $data['access_type'] = $request->input('access_type', 'public');
-                $data['password'] = ($data['access_type'] == 'password') ? bcrypt($request->input('password')) : null;
+                $data['password'] = ($data['access_type'] == 'password') ? encrypt($request->input('password')) : null;
 
                 // Check if the authenticated user is disabled
                 $user = auth()->user();
@@ -80,19 +80,10 @@ class LinkController extends Controller
 
         if ($clickLimit !== null) {
             // Check if the link has exceeded the click limit
-            if ($link->click_count >= $clickLimit) {
+            if ($link->click_count == $clickLimit) {
                 return view('click_limit');
             }
-
-            // Check if the user has already clicked the link in the current session
-            $userClicked = $request->session()->get('user_clicked_'.$link->id, false);
-
-            if (!$userClicked) {
-                $request->session()->put('user_clicked_'.$link->id, true);
-
-                $link->click_count++;
-                $link->save();
-            }
+            
         }
 
         switch ($link->access_type) {
@@ -113,8 +104,8 @@ class LinkController extends Controller
                     
                     return redirect($link->original_url);
                 } else {
-                    // User not authenticated
-                    abort(404);
+                    $link->click_count--;
+                    abort(403,'private link');
                 }
                 break;
 
@@ -171,6 +162,11 @@ class LinkController extends Controller
     public function edit($id)
     {
         $link = Link::find($id);
+        $user = auth()->user();
+
+        if ($user && $user->is_disabled) {
+            abort(403, 'User is disabled.');
+        }
 
         if (!$link) {
             return redirect()->back()->withErrors(['Link not found.']);
@@ -181,35 +177,46 @@ class LinkController extends Controller
     }
 
     public function update(Request $request, $id)
-    {
-        $link = Link::find($id);
+{
+    $link = Link::find($id);
 
-        if (!$link) {
-            return redirect()->back()->withErrors(['Link not found.']);
-        }
-        $request->validate([
-            'original_url' => 'required|url',
-        ]);
-
-        // Check if the authenticated user is disabled
-        $user = auth()->user();
-        if ($user && $user->is_disabled) {
-            abort(403, 'User is disabled.');
-        }
-
-        $link->original_url = $request->input('original_url', $link->original_url);
-        $link->spaces_id = $request->input('space_id', $link->spaces_id);
-        $link->short_url = $request->input('short_url', $link->short_url);
-        $link->pixels_id = $request->input('pixels_id', $link->pixels_id);
-        $link->click_limit = $request->input('click_limit', $link->click_limit);
-        $link->expiration_date = $request->input('expiration_date', $link->expiration_date);
-        $link->password = $request->input('password', $link->password);
-        $link->access_type = $request->input('access_type', $link->access_type);
-
-        $link->save();
-
-        return redirect(route('user.link'))->with('success', 'Link updated successfully.');
+    if (!$link) {
+        return redirect()->back()->withErrors(['Link not found.']);
     }
+
+    $request->validate([
+        'original_url' => 'required|url',
+        'password' => $request->input('access_type') === 'password' ? 'required' : '',
+    ]);
+
+    // Check if the authenticated user is disabled
+    $user = auth()->user();
+    if ($user && $user->is_disabled) {
+        abort(403, 'User is disabled.');
+    }
+
+    $link->original_url = $request->input('original_url', $link->original_url);
+    $link->spaces_id = $request->input('space_id', $link->spaces_id);
+    $link->short_url = $request->input('short_url', $link->short_url);
+    $link->pixels_id = $request->input('pixels_id', $link->pixels_id);
+
+    $oldClickLimit = $link->click_limit;
+    $newClickLimit = $request->input('click_limit', $oldClickLimit);
+    $link->click_limit = $newClickLimit;
+
+    if ($newClickLimit != $oldClickLimit) {
+
+        $link->click_count = 0;
+    }
+
+    $link->expiration_date = $request->input('expiration_date', $link->expiration_date);
+    $link->password = $request->input('password', $link->password);
+    $link->access_type = $request->input('access_type', $link->access_type);
+
+    $link->save();
+
+    return redirect(route('user.link'))->with('success', 'Link updated successfully.');
+}
 
     public function checkPassword($shortUrl, Request $request)
     {
@@ -217,7 +224,7 @@ class LinkController extends Controller
 
         if ($link) {
             $providedPassword = $request->input('password');
-            if ($providedPassword === $link->password) {
+            if (decrypt($link->password) === $providedPassword) {
 
                 $link->click_count++;
                 $link->save();

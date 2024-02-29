@@ -154,11 +154,17 @@
                 </label>
                 <label for="click_limit" class="settings-field">Click Limit (optional):
                     <input type="number" name="click_limit" min="1" class="settings-field"></label>
-                <label for="expiration_date" class="settings-field">Expiration Date:
-                    <input type="date" name="expiration_date" value="{{ old('expiration_date') }}"
-                        class="settings-field" min="{{ date('Y-m-d') }}">
+                <label for="expiration_date" class="settings-field">Expiration Date and Time:
+                    <input type="datetime-local" name="expiration_date" class="settings-field"
+                        min="{{ now()->addDay()->format('Y-m-d\TH:i') }}"
+                        value="{{ now()->addDay()->format('Y-m-d\TH:i') }}">
                 </label>
 
+                <div id="passwordField">
+                    <label for="password">Password:</label>
+                    <input type="password" name="password" id="password">
+                </div>
+                <br>
 
                 <div>
                     <label for="access_type">Access Type:</label>
@@ -169,18 +175,12 @@
                     </select>
                 </div>
 
-                <div id="passwordField">
-                    <label for="password">Password:</label>
-                    <input type="password" name="password" id="password">
-                </div>
-
                 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
                 <script>
                     $(document).ready(function() {
                         // Initially hide the password field
                         $('#passwordField').hide();
 
-                        // Show/hide password field based on access_type
                         $('#access_type').change(function() {
                             if ($(this).val() === 'password') {
                                 $('#passwordField').show();
@@ -188,8 +188,6 @@
                                 $('#passwordField').hide();
                             }
                         });
-
-                        // Trigger change event on page load if needed
                         $('#access_type').trigger('change');
                     });
                 </script>
