@@ -49,8 +49,8 @@
                             @method('DELETE')
                             <button type="submit" style="background-color: red;color:white;padding:3px">Delete</button>
                         </form>
-                    </td>
-                    <td> <a href="{{ route('pixels.edit', $users->id) }}" style="text-decoration: none;">
+
+                        <a href="{{ route('pixels.edit', $users->id) }}" style="text-decoration: none;">
                             <button
                                 style="background-color: #3490dc; color: white; padding: 3px; margin-left: 5px;">Edit</button>
                         </a>

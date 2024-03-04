@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('links', function (Blueprint $table) {
-            // $table->foreignId('pixels_id')->constrained()->default(0); 
+             $table->foreignId('pixels_id')->constrained()->default(0); 
         });
     }
 

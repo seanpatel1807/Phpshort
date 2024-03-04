@@ -22,9 +22,11 @@ class SpaceController extends Controller
         $user = auth()->user();
 
         // Check if the authenticated user is disabled
-        if ($user && $user->is_disabled) {
-            abort(403, 'User is disabled.');
-        }
+       if ($user && $user->is_disabled) {
+    auth()->logout(); // Log out the user
+
+    return redirect(route('login'))->with('logout', 'You have been logged out due to account disability.');
+}
 
         Space::create([
             'space_name' => $request->input('value'),
@@ -40,9 +42,11 @@ class SpaceController extends Controller
 
         // Check if the authenticated user is disabled
         $user = auth()->user();
-        if ($user && $user->is_disabled) {
-            abort(403, 'User is disabled.');
-        }
+       if ($user && $user->is_disabled) {
+    auth()->logout(); // Log out the user
+
+    return redirect(route('login'))->with('logout', 'You have been logged out due to account disability.');
+}
 
         $spaces = Space::withCount('links')
             ->when($query, function ($query) use ($request) {
@@ -63,9 +67,11 @@ class SpaceController extends Controller
 
         // Check if the authenticated user is disabled
         $user = auth()->user();
-        if ($user && $user->is_disabled) {
-            abort(403, 'User is disabled.');
-        }
+       if ($user && $user->is_disabled) {
+    auth()->logout(); // Log out the user
+
+    return redirect(route('login'))->with('logout', 'You have been logged out due to account disability.');
+}
 
         $space->delete();
         return redirect()->back()->with('success', 'Space deleted successfully!');
@@ -77,9 +83,11 @@ class SpaceController extends Controller
 
         // Check if the authenticated user is disabled
         $user = auth()->user();
-        if ($user && $user->is_disabled) {
-            abort(403, 'User is disabled.');
-        }
+       if ($user && $user->is_disabled) {
+    auth()->logout(); // Log out the user
+
+    return redirect(route('login'))->with('logout', 'You have been logged out due to account disability.');
+}
 
         $user = DB::table('spaces')
             ->join('users', 'users.id', '=', 'spaces.users_id')
@@ -87,12 +95,12 @@ class SpaceController extends Controller
                 'spaces.*',
                 'users.name as user_name',
                 'users.email as user_email',
-                DB::raw('(SELECT COUNT(*) FROM links WHERE links.spaces_id = spaces.id) as links_count')
+                DB::raw('(SELECT COUNT(*) FROM links WHERE links.space_id = spaces.id) as links_count')
             )
             ->when($query, function ($query) use ($request) {
                 $query->where('users.name', 'like', '%' . $request->input('query') . '%')
                       ->orWhere('space_name', 'like', '%' . $request->input('query') . '%')
-                      ->orWhere(DB::raw('(SELECT COUNT(*) FROM links WHERE links.spaces_id = spaces.id)'), 'like', '%' . $request->input('query') . '%');
+                      ->orWhere(DB::raw('(SELECT COUNT(*) FROM links WHERE links.space_id = spaces.id)'), 'like', '%' . $request->input('query') . '%');
             })
             ->get();
 
@@ -109,9 +117,11 @@ class SpaceController extends Controller
 
         // Check if the authenticated user is disabled
         $user = auth()->user();
-        if ($user && $user->is_disabled) {
-            abort(403, 'User is disabled.');
-        }
+       if ($user && $user->is_disabled) {
+    auth()->logout(); // Log out the user
+
+    return redirect(route('login'))->with('logout', 'You have been logged out due to account disability.');
+}
 
         return view('edit_space', compact('space'));
     }
@@ -126,9 +136,11 @@ class SpaceController extends Controller
 
         // Check if the authenticated user is disabled
         $user = auth()->user();
-        if ($user && $user->is_disabled) {
-            abort(403, 'User is disabled.');
-        }
+       if ($user && $user->is_disabled) {
+    auth()->logout(); // Log out the user
+
+    return redirect(route('login'))->with('logout', 'You have been logged out due to account disability.');
+}
 
         $request->validate([
             'space_name' => 'required',

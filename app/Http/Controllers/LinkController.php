@@ -14,29 +14,17 @@ class LinkController extends Controller
 {
     public function create(Request $request)
     {
-
-        $validator = Validator::make($request->all(), [
-            'original_url' => 'required|url',
-        ]);
-    
-        // Check if validation fails
-        if ($validator->fails()) {
-           
-            return redirect()->back()
-                ->withErrors($validator)
-                ->withInput();
-        }
-    
-    
         $originalUrls = explode("\n", $request->input('original_url'));
         $originalUrls = array_map('trim', $originalUrls);
 
         foreach ($originalUrls as $originalUrl) {
-            $existingLink = Link::where('original_url', $originalUrl)->first();
 
+        $existingLink = Link::where('original_url', $originalUrl)
+            ->where('user_id', auth()->id())
+            ->first();
             if ($existingLink) {
                 $shortUrl = $existingLink->short_url;
-                $message = 'This URL already has a short link.';
+                return redirect()->back()->withErrors(['duplicate_link' => "This URL already been shorten."]);
             } else {
                 $data = $request->all();
                 $click_limit = $request->input('click_limit');
@@ -58,7 +46,7 @@ class LinkController extends Controller
         $allSpaces = Space::all();
         $allPixels = Pixel::all();
 
-        return redirect()->route('user.link', compact('shortUrl', 'message', 'allLinks', 'allSpaces', 'allPixels'));
+        return redirect()->route('user.link', compact('shortUrl','allLinks', 'allSpaces', 'allPixels'));
     }
 
     public function redirect($shortUrl, Request $request)
@@ -69,8 +57,10 @@ class LinkController extends Controller
         // Check if the user associated with the link is disabled
         $user = $link->user;
         if ($user && $user->is_disabled) {
-            abort(403, 'User is disabled.');
-        }
+    auth()->logout(); 
+
+    return redirect(route('login'))->with('logout', 'You have been logged out due to account disability.');
+}
 
         if ($link->expiration_date !== null && now() >= $link->expiration_date) {
             abort(404);
@@ -121,7 +111,6 @@ class LinkController extends Controller
     abort(404);
 }
 
-
     public function index()
     {
         // Only fetch links associated with the authenticated user
@@ -129,8 +118,10 @@ class LinkController extends Controller
 
         // Check if the user is disabled
         if ($user && $user->is_disabled) {
-            abort(403, 'User is disabled.');
-        }
+    auth()->logout(); 
+
+    return redirect(route('login'))->with('logout', 'You have been logged out due to account disability.');
+    }
 
         $allLinks = Link::where('user_id', $user->id)->get();
         $allSpaces = Space::all();
@@ -148,12 +139,14 @@ class LinkController extends Controller
 
         // Check if the authenticated user is disabled
         $user = auth()->user();
-        if ($user && $user->is_disabled) {
-            abort(403, 'User is disabled.');
+        if ($user && $user->is_disabled) 
+        {
+        auth()->logout(); 
+
+        return redirect(route('login'))->with('logout', 'You have been logged out due to account disability.');
         }
 
         $link->delete();
-
         $allLinks = Link::all();
 
         return  redirect()->back()->with('success', 'Deleted successfully');
@@ -165,8 +158,9 @@ class LinkController extends Controller
         $user = auth()->user();
 
         if ($user && $user->is_disabled) {
-            abort(403, 'User is disabled.');
-        }
+            auth()->logout(); 
+            return redirect(route('login'))->with('logout', 'You have been logged out due to account disability.');
+            }
 
         if (!$link) {
             return redirect()->back()->withErrors(['Link not found.']);
@@ -185,18 +179,18 @@ class LinkController extends Controller
     }
 
     $request->validate([
-        'original_url' => 'required|url',
         'password' => $request->input('access_type') === 'password' ? 'required' : '',
     ]);
 
     // Check if the authenticated user is disabled
     $user = auth()->user();
     if ($user && $user->is_disabled) {
-        abort(403, 'User is disabled.');
-    }
+        auth()->logout(); 
+        return redirect(route('login'))->with('logout', 'You have been logged out due to account disability.');
+        }
 
     $link->original_url = $request->input('original_url', $link->original_url);
-    $link->spaces_id = $request->input('space_id', $link->spaces_id);
+    $link->space_id = $request->input('space_id', $link->space_id);
     $link->short_url = $request->input('short_url', $link->short_url);
     $link->pixels_id = $request->input('pixels_id', $link->pixels_id);
 

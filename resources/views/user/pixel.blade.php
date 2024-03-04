@@ -55,6 +55,7 @@
                             <th>Name</th>
                             <th>Type</th>
                             <th>links</th>
+                            <th>functions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -70,9 +71,9 @@
                                         <button type="submit" onclick="return confirm('Are you sure?')"
                                             style="background-color: red;padding:10px">Delete</button>
                                     </form>
-                                </td>
-                                <td> <a href="{{ route('pixels.edit', ['id' => $pixel->id]) }}"
-                                        class="btn btn-info">Edit</a>
+                                    <br>
+                                    <a href="{{ route('pixels.edit', ['id' => $pixel->id]) }}" class="btn"
+                                        style="background-color: #7b60fb;padding:5px;color:white">Edit</a>
                                 </td>
                             </tr>
                         @endforeach

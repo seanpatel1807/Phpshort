@@ -14,7 +14,7 @@ class Space extends Model
     
     public function links()
 {
-    return $this->hasMany(Link::class,'spaces_id','id');
+    return $this->hasMany(Link::class,'space_id','id');
 }
 public function user()
 {

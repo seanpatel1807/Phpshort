@@ -83,7 +83,7 @@
                 margin-bottom: 10px;
             }
 
-            .settings-field {
+            .settings-field { 
                 margin-bottom: 10px;
                 display: flow-root;
             }
@@ -114,22 +114,17 @@
             </script>
         @endif
 
-        @if ($errors->any())
-            <div class="alert alert-danger">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
+        @if ($errors->has('duplicate_link'))
+            <div class="alert alert-danger">{{ $errors->first('duplicate_link') }}</div>
         @endif
+
         <button id="settingsButton" onclick="toggleSettings()">Settings <i class="fas fa-cog"></i></button>
         <div>
             <form method="POST" action="/create-link" class="flex" style="gap:10px">
                 @csrf
-                <textarea class="w-full" type="url" id="original_url" name="original_url" placeholder="Type or paste the link"></textarea>
+                <textarea class="w-full" type="url" id="original_url" name="original_url" placeholder="Type or paste the link"
+                    required></textarea>
         </div>
-        <!-- Settings button -->
         <div>
 
             <!-- Settings container -->
@@ -162,10 +157,9 @@
 
                 <div id="passwordField">
                     <label for="password">Password:</label>
-                    <input type="password" name="password" id="password">
+                    <input type="password" name="password" id="password" required>
                 </div>
                 <br>
-
                 <div>
                     <label for="access_type">Access Type:</label>
                     <select name="access_type" id="access_type">

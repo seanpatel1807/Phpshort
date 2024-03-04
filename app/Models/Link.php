@@ -11,7 +11,7 @@ class Link extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'original_url', 'short_url', 'expiration_date', 'spaces_id', 'pixels_id', 'click_limit', 'expiration_date', 'password', 'access_type','is_disabled'];
+    protected $fillable = ['user_id', 'original_url', 'short_url', 'expiration_date', 'space_id', 'pixels_id', 'click_limit', 'expiration_date', 'password', 'access_type','is_disabled'];
 
     public static function generateShortUrl($request, $originalUrl)
     {
@@ -29,13 +29,13 @@ class Link extends Model
         
         $user = auth()->user();
         $clickLimit=$request['click_limit'];
-
+        // dd($request);
         $link = self::create([
             'original_url' => $originalUrl,
             'short_url' => $hashids,
             'expiration_date' => $expirationDate,
             'user_id' => $user->id,
-            'spaces_id' => $request['space_id'],
+            'space_id' => $request['space_id'],
             'pixels_id' => $request['pixels_id'],
             'click_limit' =>  $clickLimit,
             'password' => $request['password'],

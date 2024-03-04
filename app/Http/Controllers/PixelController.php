@@ -15,16 +15,17 @@ class PixelController extends Controller
 
     public function store(Request $request)
     {
-        
         $request->validate([
             'name' => 'required|string',
             'type' => 'required|string',
         ]);
+
         $user = auth()->user();
 
         // Check if the authenticated user is disabled
         if ($user && $user->is_disabled) {
-            abort(403, 'User is disabled.');
+            auth()->logout(); // Log out the user
+            return redirect(route('login'))->with('logout', 'You have been logged out due to account disability.');
         }
 
         Pixel::create([
@@ -43,7 +44,8 @@ class PixelController extends Controller
         // Check if the authenticated user is disabled
         $user = auth()->user();
         if ($user && $user->is_disabled) {
-            abort(403, 'User is disabled.');
+            auth()->logout(); // Log out the user
+            return redirect(route('login'))->with('logout', 'You have been logged out due to account disability.');
         }
 
         $pixels = DB::table('pixels')
@@ -66,7 +68,8 @@ class PixelController extends Controller
         // Check if the authenticated user is disabled
         $user = auth()->user();
         if ($user && $user->is_disabled) {
-            abort(403, 'User is disabled.');
+            auth()->logout(); // Log out the user
+            return redirect(route('login'))->with('logout', 'You have been logged out due to account disability.');
         }
 
         $pixel->delete();
@@ -81,7 +84,8 @@ class PixelController extends Controller
         // Check if the authenticated user is disabled
         $user = auth()->user();
         if ($user && $user->is_disabled) {
-            abort(403, 'User is disabled.');
+            auth()->logout(); // Log out the user
+            return redirect(route('login'))->with('logout', 'You have been logged out due to account disability.');
         }
 
         return view('pixels.edit', compact('pixel'));
@@ -99,7 +103,8 @@ class PixelController extends Controller
         // Check if the authenticated user is disabled
         $user = auth()->user();
         if ($user && $user->is_disabled) {
-            abort(403, 'User is disabled.');
+            auth()->logout(); // Log out the user
+            return redirect(route('login'))->with('logout', 'You have been logged out due to account disability.');
         }
 
         $pixel->update([
@@ -117,7 +122,8 @@ class PixelController extends Controller
         // Check if the authenticated user is disabled
         $user = auth()->user();
         if ($user && $user->is_disabled) {
-            abort(403, 'User is disabled.');
+            auth()->logout(); // Log out the user
+            return redirect(route('login'))->with('logout', 'You have been logged out due to account disability.');
         }
 
         $user = DB::table('pixels')

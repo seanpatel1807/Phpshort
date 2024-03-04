@@ -79,12 +79,20 @@ class UserController extends Controller
     }
     
     public function destroy(User $user)
-    {
-        $user->load('links');
-        $user->delete();
-
-        return redirect()->route('users.index')->with('success', 'User deleted successfully.');
+{
+    $user->load('links');
+    
+    if ($user->links->isNotEmpty()) {
+        foreach ($user->links as $link) {
+            $link->delete();
+        }
     }
+
+    $user->delete();
+
+    return redirect()->route('users.index')->with('success', 'User deleted successfully.');
+}
+
     public function disable(User $user)
     {
         $user->is_disabled=1;
