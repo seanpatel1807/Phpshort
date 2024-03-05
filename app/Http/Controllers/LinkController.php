@@ -78,7 +78,17 @@ class LinkController extends Controller
 
         switch ($link->access_type) {
             case 'password':
-                return view('password_form', compact('link'));
+                if (auth()->check()) {
+                    // Check if the authenticated user is the owner of the link
+                    if ($link->user_id === auth()->user()->id) {
+                        $link->click_count++;
+                        $link->save();
+                        return redirect($link->original_url);
+                    }
+
+                } else {
+                    return view('password_form', compact('link'));
+                }
                 break;
 
             case 'private':

@@ -83,7 +83,7 @@
                 margin-bottom: 10px;
             }
 
-            .settings-field { 
+            .settings-field {
                 margin-bottom: 10px;
                 display: flow-root;
             }
@@ -157,7 +157,7 @@
 
                 <div id="passwordField">
                     <label for="password">Password:</label>
-                    <input type="password" name="password" id="password" required>
+                    <input type="password" name="password" id="password">
                 </div>
                 <br>
                 <div>
@@ -178,10 +178,14 @@
                         $('#access_type').change(function() {
                             if ($(this).val() === 'password') {
                                 $('#passwordField').show();
+                                $('#password').prop('required', true);
                             } else {
                                 $('#passwordField').hide();
+                                $('#password').prop('required', false);
                             }
                         });
+
+                        // Trigger change event on page load to check the initial state
                         $('#access_type').trigger('change');
                     });
                 </script>

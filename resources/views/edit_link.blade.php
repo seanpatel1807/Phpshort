@@ -107,11 +107,18 @@
                 </div>
 
 
+                @php
+                    try {
+                        $decryptedPassword = decrypt($link->password);
+                    } catch (\Illuminate\Contracts\Encryption\DecryptException $e) {
+                        $decryptedPassword = $link->password;
+                    }
+                @endphp
                 @if ($link->access_type === 'password')
                     <div id="password">
-                        <p>Current password: {{ decrypt($link->password) }}</p>
+                        <p>Current password: {{ $decryptedPassword }}</p>
                         <label for="password">New Password:</label>
-                        <input type="password" name="password">
+                        <input type="password" name="password" value="{{ $link->password }}">
                     </div>
                 @else
                     <input type="password" name="password" id="password" style="display: none">
