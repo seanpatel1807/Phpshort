@@ -75,6 +75,7 @@
                         required>
                 </div>
 
+
                 <div class="form-group">
                     <label for="space_id">Select Space:</label>
                     <select name="space_id" id="space_id" class="custom-dropdown" required>
@@ -103,7 +104,7 @@
                     <label for="expiration_date">Expiration Date and Time:</label>
                     <input type="datetime-local" name="expiration_date"
                         value="{{ $link->expiration_date ? \Carbon\Carbon::parse($link->expiration_date)->format('Y-m-d\TH:i') : '' }}"
-                        class="settings-field" min="{{ date('Y-m-d\TH:i') }}">
+                        class="settings-field" min="{{ $link->expiration_date }}">
                 </div>
 
 
@@ -118,7 +119,7 @@
                     <div id="password">
                         <p>Current password: {{ $decryptedPassword }}</p>
                         <label for="password">New Password:</label>
-                        <input type="password" name="password" value="{{ $link->password }}">
+                        <input type="password" name="password" value="{{ $decryptedPassword }}">
                     </div>
                 @else
                     <input type="password" name="password" id="password" style="display: none">
