@@ -89,8 +89,8 @@
 
                 <div class="form-group">
                     <label for="short_url">Custom Alias (Optional):</label>
-                    <input type="text" class="settings-field" name="short_url" pattern="[a-zA-Z0-9-_]+"
-                        value="{{ $link->short_url }}"
+                    <input type="text" class="settings-field" name="uniqid" pattern="[a-zA-Z0-9-_]+"
+                        value="{{ $link->uniqid }}"
                         placeholder="Only letters, numbers, dashes, and underscores are allowed." title="Custom Alias">
                 </div>
 
@@ -107,15 +107,14 @@
                         class="settings-field" min="{{ $link->expiration_date }}">
                 </div>
 
-
-                @php
-                    try {
-                        $decryptedPassword = decrypt($link->password);
-                    } catch (\Illuminate\Contracts\Encryption\DecryptException $e) {
-                        $decryptedPassword = $link->password;
-                    }
-                @endphp
                 @if ($link->access_type === 'password')
+                    @php
+                        try {
+                            $decryptedPassword = decrypt($link->password);
+                        } catch (\Illuminate\Contracts\Encryption\DecryptException $e) {
+                            $decryptedPassword = $link->password;
+                        }
+                    @endphp
                     <div id="password">
                         <p>Current password: {{ $decryptedPassword }}</p>
                         <label for="password">New Password:</label>

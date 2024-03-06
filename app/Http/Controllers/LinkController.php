@@ -12,40 +12,40 @@ use Illuminate\Support\Facades\Validator;
 class LinkController extends Controller
 {
     public function create(Request $request)
-    {
-        $originalUrls = array_map('trim', explode("\n", $request->input('original_url')));
+{
+    $originalUrls = array_map('trim', explode("\n", $request->input('original_url')));
 
-        foreach ($originalUrls as $originalUrl) {
-            $existingLink = Link::where('original_url', $originalUrl)
-                ->where('user_id', auth()->id())
-                ->first();
+    foreach ($originalUrls as $originalUrl) {
+        $existingLink = Link::where('original_url', $originalUrl)
+            ->where('user_id', auth()->id())
+            ->first();
 
-            if ($existingLink) {
-                $shortUrl = $existingLink->short_url;
-                return redirect()->back()->withErrors(['duplicate_link' => "This URL $shortUrl has already been shortened."]);
-            } else {
-                $data = $request->all();
-                $clickLimit = $request->input('click_limit');
-                $data['access_type'] = $request->input('access_type', 'public');
-                $data['password'] = ($data['access_type'] == 'password') ? encrypt($request->input('password')) : null;
+        if ($existingLink) {
+            $shortUrl = $existingLink->short_url;
+            return redirect()->back()->withErrors(['duplicate_link' => "This URL $shortUrl has already been shortened."]);
+        } else {
+            $data = $request->all();
+            $clickLimit = $request->input('click_limit');
+            $data['access_type'] = $request->input('access_type', 'public');
+            $data['password'] = ($data['access_type'] == 'password') ? encrypt($request->input('password')) : null;
 
-                // Check if the authenticated user is disabled
-                $user = auth()->user();
-                if ($user && $user->is_disabled) {
-                    abort(403, 'User is disabled.');
-                }
 
-                $shortUrl = Link::generateShortUrl($data, $originalUrl);
-                $message = null;
+            $user = auth()->user();
+            if ($user && $user->is_disabled) {
+                abort(403, 'User is disabled.');
             }
+
+            $shortUrl = Link::generateShortUrl($data, $originalUrl);
+            $message = null;
         }
-
-        $allLinks = Link::all();
-        $allSpaces = Space::all();
-        $allPixels = Pixel::all();
-
-        return redirect()->route('user.link', compact('shortUrl', 'allLinks', 'allSpaces', 'allPixels'));
     }
+
+    $allLinks = Link::all();
+    $allSpaces = Space::all();
+    $allPixels = Pixel::all();
+
+    return redirect()->route('user.link', compact('shortUrl', 'allLinks', 'allSpaces', 'allPixels'));
+}
 
     public function redirect($shortUrl, Request $request)
     {
@@ -165,48 +165,56 @@ class LinkController extends Controller
     }
 
     public function update(Request $request, $id)
-    {
-        $link = Link::find($id);
-
-        if (!$link) {
-            return redirect()->back()->withErrors(['Link not found.']);
-        }
-
-        $request->validate([
-            'original_url' => 'required|unique:links,original_url,' . $id,
-            'password' => $request->input('access_type') === 'password' ? 'required' : '',
-        ]);
-
-        $user = auth()->user();
-        if ($user && $user->is_disabled) {
-            auth()->logout();
-            return redirect(route('login'))->with('logout', 'You have been logged out due to account disability.');
-        }
-
-        $link->original_url = $request->input('original_url', $link->original_url);
-        $link->space_id = $request->input('space_id', $link->space_id);
-        $link->short_url = $request->input('short_url', $link->short_url);
-        $link->pixels_id = $request->input('pixels_id', $link->pixels_id);
-
-        $oldClickLimit = $link->click_limit;
-        $newClickLimit = $request->input('click_limit', $oldClickLimit);
-        $link->click_limit = $newClickLimit;
-        
-        $oldClickCount = $link->click_count;
-            
-        if ($newClickLimit != $oldClickLimit || $oldClickCount >= $oldClickLimit) {
-
-            $link->click_count = 0;
-        }
-        
-        $link->expiration_date = $request->input('expiration_date', $link->expiration_date);
-        $link->password = $request->input('password', $link->password);
-        $link->access_type = $request->input('access_type', $link->access_type);
-
-        $link->save();
-
-        return redirect(route('user.link'))->with('success', 'Link updated successfully.');
+{
+    $link = Link::find($id);
+    
+    if (!$link) {
+        return redirect()->back()->withErrors(['Link not found.']);
     }
+    
+    $request->validate([
+        'original_url' => 'required|unique:links,original_url,' . $id,
+        'password' => $request->input('access_type') === 'password' ? 'required' : '',
+        'expiration_date' => 'nullable|date|after:now',
+    ]);
+
+    $user = auth()->user();
+    if ($user && $user->is_disabled) {
+        auth()->logout();
+        return redirect(route('login'))->with('logout', 'You have been logged out due to account disability.');
+    }
+
+    $link->original_url = $request->input('original_url', $link->original_url);
+    $link->space_id = $request->input('space_id', $link->space_id);
+    $link->short_url = $request->input('short_url', $link->short_url);
+    $link->pixels_id = $request->input('pixels_id', $link->pixels_id);
+
+    $oldClickLimit = $link->click_limit;
+    $newClickLimit = $request->input('click_limit', $oldClickLimit);
+    $link->click_limit = $newClickLimit;
+
+    $oldClickCount = $link->click_count;
+
+    if ($newClickLimit != $oldClickLimit || $oldClickCount >= $oldClickLimit) {
+        $link->click_count = 0;
+    }
+
+    $expirationDate = $request->input('expiration_date', $link->expiration_date);
+
+    if ($expirationDate !== null && now() >= $expirationDate) {
+        return redirect()->route('edit.link', $id)->with('expiration_prompt', true);
+    }
+
+    $link->expiration_date = $expirationDate;
+    $link->access_type = $request->input('access_type', $link->access_type);
+    
+    $password = $request->input('password');
+    $link->password = ($password && $link->access_type === 'password') ? encrypt($password) : null;
+    
+    $link->save();
+
+    return redirect(route('user.link'))->with('success', 'Link updated successfully.');
+}
 
     public function checkPassword($shortUrl, Request $request)
     {

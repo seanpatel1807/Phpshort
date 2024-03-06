@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Pixel;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 
 class PixelController extends Controller
 {
@@ -16,7 +17,11 @@ class PixelController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string',
+            'name' => [
+                'required',
+                'string',
+                Rule::unique('pixels')->where('users_id', auth()->id())
+            ],
             'type' => 'required|string',
         ]);
 
@@ -94,7 +99,11 @@ class PixelController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'name' => 'required|string',
+            'name' => [
+                'required',
+                'string',
+                Rule::unique('pixels')->ignore($id)->where('users_id', auth()->id())
+            ],
             'type' => 'required|string',
         ]);
 

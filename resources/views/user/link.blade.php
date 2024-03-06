@@ -144,9 +144,10 @@
                     </select>
                 </label>
                 <label>custom alias
-                    <input type="text" name="custom_alias" pattern="[a-zA-Z0-9-_]+" placeholder="Custom alias"
+                    <input type="text" name="uniqid" pattern="[a-zA-Z0-9-_]+" placeholder="Custom alias"
                         title="Only letters, numbers, dashes, and underscores are allowed." class="settings-field">
                 </label>
+
                 <label for="click_limit" class="settings-field">Click Limit (optional):
                     <input type="number" name="click_limit" min="1" class="settings-field"></label>
                 <label for="expiration_date" class="settings-field">Expiration Date and Time:
@@ -223,8 +224,10 @@
             <tbody>
                 @foreach ($allLinks->reverse() as $link)
                     <tr>
-                        <td><a href="/{{ $link->short_url }}"
-                                target="_blank">https://127.0.0.1:8000/{{ $link->short_url }}</a>
+                        <td>
+                            <a href="/{{ $link->short_url }}" target="_blank">
+                                {{ $link->uniqid ? 'https://127.0.0.1:8000/' . $link->uniqid : 'https://127.0.0.1:8000/' . $link->short_url }}
+                            </a>
                         </td>
                         <td>{{ $link->click_count }}</td>
                         <td>{{ $link->created_at }}</td>
