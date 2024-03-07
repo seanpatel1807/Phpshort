@@ -116,10 +116,22 @@
                         }
                     @endphp
                     <div id="password">
-                        <p>Current password: {{ $decryptedPassword }}</p>
                         <label for="password">New Password:</label>
-                        <input type="password" name="password" value="{{ $decryptedPassword }}">
+                        <input type="password" name="password" value="{{ $decryptedPassword }}" id="passwordInput">
+                        <button type="button" onclick="Password()">Show</button>
                     </div>
+
+                    <script>
+                        function Password() {
+                            var passwordInput = document.getElementById('passwordInput');
+
+                            if (passwordInput.type === 'password') {
+                                passwordInput.type = 'text';
+                            } else {
+                                passwordInput.type = 'password';
+                            }
+                        }
+                    </script>
                 @else
                     <input type="password" name="password" id="password" style="display: none">
                 @endif

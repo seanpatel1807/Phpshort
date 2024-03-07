@@ -32,7 +32,8 @@ class LinkController extends Controller
 
             $user = auth()->user();
             if ($user && $user->is_disabled) {
-                abort(403, 'User is disabled.');
+                auth()->logout();
+                return redirect(route('login'))->with('logout', 'You have been logged out due to account disability.');
             }
 
             $shortUrl = Link::generateShortUrl($data, $originalUrl);

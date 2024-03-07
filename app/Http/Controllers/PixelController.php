@@ -53,15 +53,15 @@ class PixelController extends Controller
             return redirect(route('login'))->with('logout', 'You have been logged out due to account disability.');
         }
 
-        $pixels = DB::table('pixels')
+        $pixels = DB::table('pixels')//use of pixel table
             ->select(
-                'pixels.*',
+                'pixels.*',//select all the records of pixels
                 DB::raw('(SELECT COUNT(*) FROM links WHERE links.pixels_id = pixels.id) as links_count')
-            )
+            )//it counts the record of particular ids
             ->when($query, function ($query) use ($request) {
                 $query->where('pixels.name', 'like', '%' . $request->input('query') . '%');
             })
-            ->get();
+            ->get();//it gets the data 
 
         return view('user.pixel', compact('pixels', 'query'));
     }
