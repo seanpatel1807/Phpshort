@@ -193,7 +193,8 @@
 
             </div>
             <!-- Shorten button -->
-            <button type="submit" style="background-color:#7b60fb; padding:10px">Shorten</button>
+            <button type="submit"
+                style="background-color: #7b60fb;color: white;padding: 10px;border: none;border-radius: 5px;cursor: pointer;margin-top: 10px;">Shorten</button>
             </form>
         </div>
         <h2>All Links:</h2>
@@ -242,7 +243,7 @@
                             <form action="{{ route('link.edit', ['id' => $link->id]) }}" method="get">
                                 @csrf
                                 <button type="submit"
-                                    style="background-color:blanchedalmond;padding:10px">Edit</button>
+                                    style="background-color:rgb(75, 105, 255);padding:10px;color:white">Edit</button>
                             </form>
                         </td>
                     </tr>
