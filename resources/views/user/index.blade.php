@@ -66,6 +66,22 @@
                                                 Delete
                                             </button>
                                         </form>
+                                        <form action="{{ route('users.disable', $user->id) }}" method="post"
+                                            class="inline">
+                                            @csrf
+                                            <button type="submit"
+                                                class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100 hover:text-red-900">
+                                                Disable
+                                            </button>
+                                        </form>
+                                        <form action="{{ route('users.enable', $user->id) }}" method="post"
+                                            class="inline">
+                                            @csrf
+                                            <button type="submit"
+                                                class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100 hover:text-red-900">
+                                                Enable
+                                            </button>
+                                        </form>
                                     </div>
                                 </div>
                             </td>

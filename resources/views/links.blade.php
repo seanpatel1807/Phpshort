@@ -43,8 +43,9 @@
             <tbody>
                 @foreach ($links as $link)
                     <tr>
-                        <td><a href="{{ $link->short_url }}"
-                                target="_blank">https://127.0.0.1:8000/{{ $link->short_url }}</a></td>
+                        <td> <a href="/{{ $link->short_url }}" target="_blank">
+                                {{ $link->uniqid ? 'https://127.0.0.1:8000/' . $link->uniqid : 'https://127.0.0.1:8000/' . $link->short_url }}
+                            </a></td>
                         <td>{{ $link->user->name }}</td>
                         <td>{{ $link->click_count }}</td>
                         <td>

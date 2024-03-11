@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('links', function (Blueprint $table) {
-             $table->foreignId('pixels_id')->constrained()->default(0); 
+            $table->foreignId('user_id')->constrained()->references('id')->on('users')->onDelete('cascade');
         });
     }
 
@@ -22,7 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('links', function (Blueprint $table) {
-            //
+            
         });
     }
 };

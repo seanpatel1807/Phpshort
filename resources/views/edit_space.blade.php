@@ -43,12 +43,19 @@
                     </ul>
                 </div>
             @endif
+            @if (session('success'))
+                <div class="alert alert-danger">
+                    {{ session('success') }}
+                </div>
+            @endif
+
 
             <form action="{{ route('spaces.update', ['id' => $space->id]) }}" method="POST">
                 @csrf
                 <div class="form-group">
                     <label for="space_name">Name :</label>
-                    <input type="text" class="form-control" name="space_name" value="{{ $space->space_name }}" required>
+                    <input type="text" class="form-control" name="space_name" value="{{ $space->space_name }}"
+                        required>
                 </div>
 
                 <button type="submit" class="btn btn-custom">Update Space</button>

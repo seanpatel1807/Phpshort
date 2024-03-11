@@ -16,7 +16,7 @@ Route::view('/', 'welcome');
 Route::impersonate();
 
 // User Routes
-Route::prefix('/user')->middleware(['auth', 'verified'])->group(function () {
+Route::prefix('/user')->middleware(['auth', 'verified','nocache'])->group(function () {
     Route::get('/links', [LinkController::class, 'index'])->name('user.link');
     Route::get('/links/{id}/edit', [LinkController::class, 'edit'])->name('link.edit');
     Route::patch('/links/{id}', [LinkController::class, 'update'])->name('link.update');
@@ -40,12 +40,12 @@ Route::prefix('/user')->middleware(['auth', 'verified'])->group(function () {
         'index'=>'user.space',
     ]);
     Route::post('/spaces/{id}', [SpaceController::class, 'update'])->name('spaces.update');
-    
 
+    
 });
 
 // Authenticated User Routes
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'verified', 'nocache'])->group(function () {
     Route::view('/dashboard', 'dashboard')->name('dashboard');
 
     // Admin Routes
@@ -56,6 +56,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('/spaces', [SpaceController::class, 'data'])->name('spaces');
             Route::view('/domains', 'domains')->name('domains');
             Route::resource('users', UserController::class);
+            Route::post('/users/{user}/disable', [UserController::class, 'disable'])->name('users.disable');
+            Route::post('/users/{user}/enable', [UserController::class, 'enable'])->name('users.enable');
             Route::resource('pages', PageController::class);
            
             $adminRoutes = ['general', 'appearance', 'social', 'announcement','advanced'];
@@ -84,3 +86,4 @@ require __DIR__.'/auth.php';
 // Public Link Routes
 Route::post('/create-link', [LinkController::class, 'create']);
 Route::get('/{shortUrl}', [LinkController::class, 'redirect']);
+Route::post('/check-password/{shortUrl}', [LinkController::class,'checkPassword'])->name('check-password');

@@ -11,8 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('links', function (Blueprint $table) {
-             $table->foreignId('pixels_id')->constrained()->default(0); 
+        Schema::table('users', function (Blueprint $table) {
+            $table->boolean('is_disabled')->default(false);
+
         });
     }
 
@@ -21,7 +22,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('links', function (Blueprint $table) {
+        Schema::table('users', function (Blueprint $table) {
             //
         });
     }

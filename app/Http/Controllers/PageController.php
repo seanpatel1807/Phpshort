@@ -48,8 +48,6 @@ class PageController extends Controller
     {
         $pages = Pages::find($id);
 
-        // Validation logic here (similar to create/store)
-
         $pages->update([
             'name' => $request->input('name'),
             'slug' => $request->input('slug'),

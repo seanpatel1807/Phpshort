@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('links', function (Blueprint $table) {
-            //  $table->foreignId('space_id')->constrained();
+            $table->foreignId('spaces_id')->constrained();
         });
     }
 
